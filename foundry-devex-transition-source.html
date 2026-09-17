@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foundry Developer Experience — Transition & onboarding guide</title>
+  <link rel="icon" href="data:,">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    html[data-theme="light"] {
+      --cp-bg: #eeebf7;
+      --cp-bg-elevated: #f7f8fa;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f0eefa;
+      --cp-border: #e0dcf0;
+      --cp-border-strong: #756ed1;
+      --cp-text: #241f2b;
+      --cp-text-muted: #6d6577;
+      --cp-text-soft: #89829a;
+      --cp-accent: #756ed1;
+      --cp-accent-hover: #655dcc;
+      --cp-accent-soft: rgba(117, 110, 209, 0.12);
+      --cp-accent-fg: #ffffff;
+      --cp-link: #655dcc;
+      --cp-overlay: rgba(247, 248, 250, 0.84);
+      --cp-panel: rgba(247, 248, 250, 0.9);
+      --cp-panel-strong: rgba(247, 248, 250, 0.98);
+      --cp-sheen: rgba(255, 255, 255, 0.72);
+      --cp-highlight: rgba(117, 110, 209, 0.14);
+    }
+    html[data-theme="dark"] {
+      --cp-bg: #25212d;
+      --cp-bg-elevated: #2e2938;
+      --cp-surface: #352f40;
+      --cp-surface-soft: #40384c;
+      --cp-border: #544b62;
+      --cp-border-strong: #8d82da;
+      --cp-text: #f7f4fb;
+      --cp-text-muted: #c3b9cd;
+      --cp-text-soft: #d8d1df;
+      --cp-accent: #a99af5;
+      --cp-accent-hover: #baafff;
+      --cp-accent-soft: rgba(169, 154, 245, 0.16);
+      --cp-accent-fg: #241f2b;
+      --cp-link: #b7acff;
+      --cp-overlay: rgba(37, 33, 45, 0.88);
+      --cp-panel: rgba(46, 41, 56, 0.9);
+      --cp-panel-strong: rgba(46, 41, 56, 0.98);
+      --cp-sheen: rgba(255, 255, 255, 0.06);
+      --cp-highlight: rgba(169, 154, 245, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 32px; }
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: Aptos, "Segoe UI", Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, select { font: inherit; }
+    a { color: var(--cp-link); text-underline-offset: 3px; }
+    a:hover { color: var(--cp-accent); }
+    :focus-visible { outline: 3px solid var(--cp-warning); outline-offset: 3px; }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 28px 20px;
+      background: var(--cp-bg-elevated);
+      border-right: 1px solid var(--cp-border);
+    }
+    .brand {
+      display: block;
+      margin: 0 10px 36px;
+      text-decoration: none;
+      color: var(--cp-text);
+    }
+    .brand strong { display: block; font-size: 16px; line-height: 1.15; }
+    .brand span { display: block; margin-top: 5px; color: var(--cp-text-muted); font-size: 12px; }
+    .nav-label {
+      margin: 24px 10px 8px;
+      color: var(--cp-text-muted);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nav-label:first-of-type { margin-top: 0; }
+    .nav { display: grid; gap: 4px; }
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      color: var(--cp-text-muted);
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .nav a:hover { background: var(--cp-surface-soft); color: var(--cp-text); }
+    .nav a.active { background: var(--cp-accent-soft); color: var(--cp-accent); font-weight: 600; }
+    .nav-index {
+      width: 20px;
+      color: var(--cp-text-soft);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+    }
+    .quiet-button {
+      min-height: 38px;
+      padding: 8px 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+    }
+    .quiet-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .sidebar-note {
+      margin-top: 20px;
+      color: var(--cp-text-muted);
+      font-size: 12px;
+    }
+    .key-hint {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin: 24px 10px 0;
+      color: var(--cp-text-muted);
+      font-size: 11px;
+    }
+    .key-hint kbd {
+      display: inline-grid;
+      place-items: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 6px;
+      border: 1px solid var(--cp-border);
+      border-radius: 6px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+    }
+
+    main {
+      min-width: 0;
+      height: 100vh;
+      overflow-y: auto;
+      scroll-padding: 24px 0;
+      scroll-snap-type: y proximity;
+    }
+    .hero {
+      display: flex;
+      align-items: center;
+      width: min(1080px, calc(100% - 48px));
+      min-height: calc(100vh - 48px);
+      margin: 24px auto;
+      padding: clamp(56px, 7vh, 80px) clamp(48px, 7vw, 88px);
+      background: linear-gradient(135deg, var(--cp-bg-elevated), var(--cp-accent-soft));
+      border: 1px solid var(--cp-border);
+      border-radius: 18px;
+      scroll-snap-align: start;
+      scroll-margin-top: 24px;
+    }
+    .hero-inner { width: 100%; }
+    .eyebrow, .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      color: var(--cp-text-muted);
+      background: var(--cp-surface);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      max-width: 900px;
+      margin: 18px 0 14px;
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 500;
+      letter-spacing: -0.045em;
+      line-height: 1.05;
+    }
+    .hero-lede {
+      max-width: 720px;
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.45;
+    }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 100%;
+      margin-top: 36px;
+    }
+    .hero-section-title {
+      margin: 46px 0 18px;
+      color: var(--cp-text);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .hero-points {
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding-left: 24px;
+    }
+    .hero-points li { padding-left: 6px; }
+    .hero-points li::marker { color: var(--cp-accent); }
+    .hero-points strong { display: block; margin-bottom: 2px; }
+    .hero-points span { color: var(--cp-text-muted); }
+    .hero-point-context {
+      margin: 12px 0 0;
+      color: var(--cp-text-muted);
+      font-size: 14px;
+    }
+    .hero-meeting-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .hero-meeting {
+      padding: 12px 14px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .hero-meeting strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--cp-accent);
+      font-size: 14px;
+    }
+    .hero-meeting span { font-size: 13px; font-weight: 600; }
+    .meta-item {
+      padding-top: 12px;
+      border-top: 2px solid var(--cp-accent);
+    }
+    .meta-item span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .meta-item strong { display: block; margin-top: 6px; font-size: 16px; }
+    .orbit {
+      position: absolute;
+      right: -80px;
+      top: -48px;
+      width: 360px;
+      height: 360px;
+      border: 1px solid var(--cp-border);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .orbit::before, .orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: var(--cp-accent);
+    }
+    .orbit::before { width: 18px; height: 18px; top: 42px; left: 42px; }
+    .orbit::after { width: 10px; height: 10px; right: 6px; bottom: 120px; }
+
+    .content {
+      width: 100%;
+      margin: 0;
+      padding: 0 0 24px;
+    }
+    .section {
+      width: min(1080px, calc(100% - 48px));
+      min-height: calc(100vh - 48px);
+      margin: 0 auto 24px;
+      padding: clamp(64px, 7vw, 88px);
+      border: 1px solid var(--cp-border);
+      border-radius: 18px;
+      background: var(--cp-bg-elevated);
+      scroll-snap-align: start;
+      scroll-margin-top: 24px;
+    }
+    .section:last-child { margin-bottom: 0; }
+    .page-enter-next { animation: page-enter-next 220ms ease-out; }
+    .page-enter-previous { animation: page-enter-previous 220ms ease-out; }
+    @keyframes page-enter-next {
+      from { opacity: 0.88; transform: translateX(24px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes page-enter-previous {
+      from { opacity: 0.88; transform: translateX(-24px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
+      gap: 56px;
+      align-items: start;
+      margin-bottom: 48px;
+    }
+    .section-head.single { grid-template-columns: minmax(0, 760px); }
+    .section-head.stacked {
+      grid-template-columns: minmax(0, 760px);
+      gap: 20px;
+    }
+    .section h2 {
+      max-width: 680px;
+      margin: 18px 0 0;
+      font-size: clamp(32px, 4vw, 46px);
+      font-weight: 500;
+      letter-spacing: -0.045em;
+      line-height: 1.05;
+    }
+    .section-deck {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+    h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    h4 { margin: 0 0 6px; font-size: 16px; }
+    p { margin: 0 0 12px; }
+    p:last-child { margin-bottom: 0; }
+    ul, ol { margin: 10px 0 0; padding-left: 22px; }
+    li + li { margin-top: 7px; }
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: var(--cp-surface-soft);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 0.92em;
+    }
+
+    .grid { display: grid; gap: 20px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      padding: 26px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .card.soft { background: var(--cp-surface-soft); }
+    .card.accent { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .card p { color: var(--cp-text-muted); }
+    .card-label {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .number-card { min-height: 190px; }
+    .number {
+      display: block;
+      margin-bottom: 24px;
+      color: var(--cp-accent);
+      font-size: 38px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .callout {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: start;
+      margin-top: 24px;
+      padding: 22px;
+      border-left: 4px solid var(--cp-accent);
+      background: var(--cp-accent-soft);
+    }
+    .callout-icon {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-weight: 700;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 14px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cp-border-strong);
+    }
+    .status.active::before { background: var(--cp-success); }
+    .status.review::before { background: var(--cp-warning); }
+    .status.hold::before { background: var(--cp-danger); }
+    .owner { margin-top: 18px; color: var(--cp-text-muted); font-size: 13px; }
+    .owner strong { color: var(--cp-text); }
+
+    .principle {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 24px;
+      padding: 34px;
+      border-radius: 14px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+    .principle h3 { font-size: clamp(28px, 4vw, 44px); }
+    .principle p { align-self: end; font-size: 18px; }
+
+    .journey {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .journey-node {
+      min-height: 132px;
+      display: grid;
+      align-content: center;
+      padding: 18px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+      text-align: center;
+    }
+    .journey-node strong { font-size: 17px; }
+    .journey-node span { color: var(--cp-text-muted); font-size: 13px; }
+    .journey-arrow { color: var(--cp-accent); font-size: 22px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 16px 18px; border-bottom: 1px solid var(--cp-border); text-align: left; vertical-align: top; }
+    th {
+      color: var(--cp-text-muted);
+      background: var(--cp-surface-soft);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    tr:last-child td { border-bottom: 0; }
+
+    .timeline { position: relative; margin-top: 30px; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 12px;
+      bottom: 20px;
+      width: 2px;
+      background: var(--cp-border);
+    }
+    .timeline-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 38px 110px minmax(0, 1fr);
+      gap: 18px;
+      padding-bottom: 30px;
+    }
+    .timeline-dot {
+      z-index: 1;
+      width: 16px;
+      height: 16px;
+      margin: 4px 0 0 11px;
+      border: 4px solid var(--cp-bg);
+      border-radius: 50%;
+      background: var(--cp-accent);
+    }
+    .timeline-date {
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .timeline-body { padding: 0 0 0 4px; }
+    .timeline-body p { color: var(--cp-text-muted); }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .diagram-node {
+      padding: 22px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .diagram-node span { display: block; color: var(--cp-accent); font-size: 13px; font-weight: 700; }
+    .diagram-node strong { display: block; margin: 7px 0; font-size: 19px; }
+    .diagram-node p { color: var(--cp-text-muted); font-size: 14px; }
+
+    .link-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .link-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 7px 11px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .link-chip:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+
+    details {
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    details + details { margin-top: 12px; }
+    summary {
+      padding: 18px 22px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .details-body { padding: 0 22px 22px; color: var(--cp-text-muted); }
+
+    .portrait-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .org-group + .org-group { margin-top: 32px; }
+    .org-group-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+    .org-group-head h3 { margin: 0; }
+    .org-group-head p { margin: 0; color: var(--cp-text-muted); font-size: 14px; }
+    .portrait {
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .portrait img { display: block; width: 100%; height: auto; }
+    .portrait figcaption { padding: 14px 18px; color: var(--cp-text-muted); font-size: 13px; }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      list-style: none;
+    }
+    .checklist li {
+      position: relative;
+      margin: 0;
+      padding: 14px 16px 14px 48px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 17px;
+      top: 17px;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--cp-border-strong);
+      border-radius: 4px;
+      background: var(--cp-surface);
+    }
+
+    .resource-groups { display: grid; gap: 36px; }
+    .resource-group[hidden] { display: none; }
+    .resource-group-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+    .resource-group-head h3 { margin: 0; font-size: 24px; }
+    .resource-group-head p { max-width: 520px; margin: 0; color: var(--cp-text-muted); font-size: 14px; }
+    .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .resource {
+      padding: 18px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .action-card {
+      min-height: 240px;
+      padding: 28px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .action-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 44px;
+      border-radius: 50%;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .action-card p { color: var(--cp-text-muted); }
+    .scope-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .scope-panel {
+      padding: 26px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface-soft);
+    }
+    .scope-panel h3 { display: flex; align-items: center; gap: 10px; }
+    .scope-mark {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-size: 13px;
+    }
+    .micro-list {
+      display: grid;
+      gap: 9px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--cp-text-muted);
+    }
+    .micro-list li {
+      position: relative;
+      margin: 0;
+      padding-left: 18px;
+    }
+    .micro-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cp-accent);
+    }
+    .plain-block + .plain-block { margin-top: 36px; }
+    .plain-block h3 { margin-bottom: 0; }
+    .meeting-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .meeting-card {
+      padding: 30px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .meeting-time {
+      display: block;
+      margin-bottom: 32px;
+      color: var(--cp-accent);
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+    .meeting-card h3 { font-size: 25px; }
+    .process-strip {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-top: 24px;
+      padding: 22px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface-soft);
+    }
+    .radar-panel {
+      margin-top: 24px;
+      padding: 26px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-accent-soft);
+    }
+    .radar-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+    }
+    .radar-head span {
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .radar-head strong { font-size: 20px; }
+    .radar-panel .process-strip {
+      margin-top: 20px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .radar-panel .process-strip.radar-two { grid-template-columns: 1fr auto 1fr; }
+    .process-step { padding: 6px; }
+    .process-step span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .process-step strong { display: block; }
+    .process-step small { display: block; margin-top: 4px; color: var(--cp-text-muted); font-size: 13px; }
+    .process-arrow { color: var(--cp-accent); font-size: 20px; }
+    .wireframe {
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .wireframe-toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-surface-soft);
+    }
+    .wireframe-toolbar strong { font-size: 14px; }
+    .wireframe-toolbar span {
+      padding: 4px 8px;
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .wireframe-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr 1fr;
+      min-height: 280px;
+    }
+    .wireframe-pane {
+      padding: 24px;
+      border-right: 1px solid var(--cp-border);
+    }
+    .wireframe-pane:last-child { border-right: 0; }
+    .wireframe-label {
+      display: block;
+      margin-bottom: 24px;
+      color: var(--cp-text-muted);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .mock-message {
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+    .mock-message.accent {
+      margin-left: 24px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-text);
+    }
+    .mock-action {
+      width: 42%;
+      height: 30px;
+      margin-top: 18px;
+      border-radius: 8px;
+      background: var(--cp-accent);
+    }
+    .file-list, .signal-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .file-list li, .signal-list li {
+      margin: 0;
+      padding: 9px 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      color: var(--cp-text-muted);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+    }
+    .signal-list li {
+      border-left: 3px solid var(--cp-accent);
+      font-family: inherit;
+      font-size: 13px;
+    }
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .decision-item {
+      padding: 18px;
+      border-top: 2px solid var(--cp-accent);
+      color: var(--cp-text-muted);
+    }
+    .decision-item strong { display: block; margin-bottom: 5px; color: var(--cp-text); }
+    .work-board {
+      display: grid;
+      grid-template-columns: 0.8fr 1.35fr 0.85fr;
+      gap: 16px;
+    }
+    .work-lane {
+      padding: 18px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface-soft);
+    }
+    .lane-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      color: var(--cp-text-muted);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .lane-count {
+      display: grid;
+      place-items: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-accent);
+    }
+    .work-item {
+      padding: 18px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .work-item + .work-item { margin-top: 10px; }
+    .work-item h3 { font-size: 17px; }
+    .work-item p { color: var(--cp-text-muted); font-size: 13px; }
+    .work-item .owner { margin-top: 12px; }
+    .source-gateway {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      gap: 40px;
+      align-items: center;
+      padding: 40px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .source-gateway h3 { margin-bottom: 14px; font-size: 28px; }
+    .source-gateway p { color: var(--cp-text-muted); }
+    .report-preview {
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface-soft);
+    }
+    .report-preview img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .artifact-ladder {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 24px;
+    }
+    .artifact-step {
+      padding: 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .artifact-step span { color: var(--cp-accent); font-size: 12px; font-weight: 700; }
+    .artifact-step strong { display: block; margin: 8px 0 5px; }
+    .artifact-step p { color: var(--cp-text-muted); font-size: 14px; }
+    .route-start {
+      max-width: 620px;
+      margin: 0 auto 22px;
+      padding: 28px;
+      border-radius: 14px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      text-align: center;
+    }
+    .route-start span { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .route-start strong { font-size: 26px; }
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .person-cluster {
+      padding: 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .person-cluster > span {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .person-cluster dl { margin: 0; }
+    .person-cluster dt { margin-top: 14px; font-weight: 700; }
+    .person-cluster dt:first-child { margin-top: 0; }
+    .person-cluster dd { margin: 3px 0 0; color: var(--cp-text-muted); font-size: 13px; }
+    .system-map {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 20px;
+      align-items: stretch;
+    }
+    .system-stack {
+      display: grid;
+      gap: 8px;
+      padding: 26px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface-soft);
+    }
+    .stack-layer {
+      padding: 18px 20px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+    }
+    .stack-layer strong { display: block; }
+    .stack-layer span { color: var(--cp-text-muted); font-size: 13px; }
+    .stack-layer.accent { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .system-companions {
+      display: grid;
+      gap: 12px;
+    }
+    .companion {
+      display: grid;
+      place-content: center;
+      min-height: 120px;
+      padding: 20px;
+      border: 1px dashed var(--cp-border-strong);
+      border-radius: 14px;
+      background: var(--cp-surface);
+      text-align: center;
+    }
+    .companion strong { display: block; }
+    .companion span { color: var(--cp-text-muted); font-size: 12px; }
+    .handoff-template {
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .template-row {
+      display: grid;
+      grid-template-columns: 44px 210px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 24px;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .template-row:last-child { border-bottom: 0; }
+    .template-index {
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .template-row strong { font-size: 17px; }
+    .template-line {
+      height: 36px;
+      border-bottom: 1px solid var(--cp-border-strong);
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+    .resource[hidden] { display: none; }
+    .resource-type {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .resource a { font-weight: 600; }
+    .resource p { margin-top: 7px; color: var(--cp-text-muted); font-size: 13px; }
+    .mobile-bar { display: none; }
+    .footer {
+      padding: 40px 0 20px;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .shell {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow: visible;
+      }
+      .sidebar { display: none; }
+      main {
+        height: auto;
+        overflow: visible;
+        scroll-snap-type: none;
+      }
+      .mobile-bar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--cp-border);
+        background: var(--cp-panel-strong);
+      }
+      .mobile-bar select {
+        flex: 1;
+        min-width: 0;
+        min-height: 40px;
+        padding: 8px 10px;
+        border: 1px solid var(--cp-border);
+        border-radius: 10px;
+        background: var(--cp-surface);
+        color: var(--cp-text);
+      }
+      .hero {
+        width: min(100% - 24px, 760px);
+        min-height: 0;
+        margin: 12px auto;
+        padding: 48px 32px;
+        border-radius: 14px;
+      }
+      .content { width: 100%; padding-bottom: 12px; }
+      .section {
+        width: min(100% - 24px, 760px);
+        min-height: 0;
+        margin-bottom: 12px;
+        padding: 64px 40px;
+        border-radius: 14px;
+      }
+      .section-head { grid-template-columns: 1fr; gap: 16px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .principle { grid-template-columns: 1fr; }
+      .action-grid, .decision-grid, .route-grid { grid-template-columns: 1fr; }
+      .action-card { min-height: 0; }
+      .action-number { margin-bottom: 24px; }
+      .work-board { grid-template-columns: 1fr; }
+      .source-gateway { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .page-enter-next, .page-enter-previous { animation: none; }
+    }
+    @media (max-width: 760px) {
+      .hero-meta, .grid-2, .portrait-grid, .resource-grid, .scope-split, .meeting-grid, .system-map { grid-template-columns: 1fr; }
+      .hero-meeting-list { grid-template-columns: 1fr; }
+      .journey { grid-template-columns: 1fr; }
+      .journey-arrow { transform: rotate(90deg); text-align: center; }
+      .diagram { grid-template-columns: 1fr; }
+      .process-strip, .artifact-ladder { grid-template-columns: 1fr; }
+      .process-arrow { transform: rotate(90deg); text-align: center; }
+      .wireframe-grid { grid-template-columns: 1fr; }
+      .wireframe-pane { border-right: 0; border-bottom: 1px solid var(--cp-border); }
+      .wireframe-pane:last-child { border-bottom: 0; }
+      .template-row { grid-template-columns: 32px minmax(0, 1fr); }
+      .template-line { grid-column: 2; }
+      .timeline-item { grid-template-columns: 38px minmax(0, 1fr); }
+      .timeline-date { grid-column: 2; }
+      .timeline-body { grid-column: 2; }
+      .hero { padding: 40px 20px; }
+      .section { padding: 56px 20px; }
+      .radar-head { display: block; }
+      .radar-head strong { display: block; margin-top: 6px; }
+      .org-group-head { display: block; }
+      .org-group-head p { margin-top: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Guide navigation">
+      <a class="brand" href="#top">
+        <strong>Foundry DevEx</strong>
+        <span>Time-off coverage guide</span>
+      </a>
+      <p class="nav-label">While Amy is away</p>
+      <nav class="nav">
+        <a href="#start"><span class="nav-index">01</span>Coverage & meetings</a>
+      </nav>
+      <p class="nav-label">Supporting context</p>
+      <nav class="nav">
+        <a href="#work"><span class="nav-index">02</span>Weekly updates</a>
+      </nav>
+      <p class="nav-label">Product context</p>
+      <nav class="nav">
+        <a href="#evolution"><span class="nav-index">03</span>Extension evolution</a>
+        <a href="#vscode-surface"><span class="nav-index">04</span>VS Code surface</a>
+        <a href="#developer-surfaces"><span class="nav-index">05</span>Developer surfaces</a>
+        <a href="#telemetry"><span class="nav-index">06</span>Reach &amp; adoption</a>
+      </nav>
+      <p class="nav-label">Team context</p>
+      <nav class="nav">
+        <a href="#rhythm"><span class="nav-index">07</span>How the team works</a>
+        <a href="#planning"><span class="nav-index">08</span>Monthly planning</a>
+        <a href="#people"><span class="nav-index">09</span>People</a>
+        <a href="#access"><span class="nav-index">10</span>Repository access</a>
+        <a href="#vsc-ui"><span class="nav-index">11</span>VS Code UI system</a>
+      </nav>
+      <p class="nav-label">Reference</p>
+      <nav class="nav">
+        <a href="#resources"><span class="nav-index">12</span>Resource library</a>
+      </nav>
+      <div class="key-hint"><kbd>←</kbd><kbd>→</kbd><span>Move between pages</span></div>
+      <p class="sidebar-note">Canonical living guide. Last researched September 16, 2026.</p>
+    </aside>
+
+    <main id="top">
+      <div class="mobile-bar">
+        <strong>Foundry DevEx</strong>
+        <select id="mobileNav" aria-label="Jump to section">
+          <option value="#start">Coverage & meetings</option>
+          <option value="#work">Weekly updates</option>
+          <option value="#evolution">Extension evolution</option>
+          <option value="#vscode-surface">VS Code surface</option>
+          <option value="#developer-surfaces">Developer surfaces</option>
+          <option value="#telemetry">Reach &amp; adoption</option>
+          <option value="#rhythm">How the team works</option>
+          <option value="#planning">Monthly planning</option>
+          <option value="#people">People</option>
+          <option value="#access">Repository access</option>
+          <option value="#vsc-ui">VS Code UI system</option>
+          <option value="#resources">Resource library</option>
+        </select>
+      </div>
+
+      <header class="hero" id="start">
+        <div class="hero-inner">
+          <span class="eyebrow">Foundry Developer Experience</span>
+          <h1>Amy’s time-off coverage</h1>
+          <div class="hero-meta">
+            <div class="meta-item"><span>Out of office</span><strong>Sep 25–Oct 16</strong></div>
+            <div class="meta-item"><span>PM contacts</span><strong>Leo Yao · Redmond<br>Junjie Li · Shanghai</strong></div>
+            <div class="meta-item"><span>Urgent contact</span><strong>832-446-7816</strong></div>
+          </div>
+          <h2 class="hero-section-title">Two things to know</h2>
+          <ul class="hero-points">
+            <li>
+              <strong>Join or catch up</strong>
+              <span>Attend the Monday syncs live, or watch the recordings later—both are after 5 PM PT.</span>
+              <p class="hero-point-context">PM and engineering share what is top of mind. Design discussions usually continue offline with the relevant partners in a smaller group.</p>
+              <div class="hero-meeting-list">
+                <div class="hero-meeting"><strong>5:00–6:00 PM PT</strong><span>Rong / Shanghai weekly sync</span></div>
+                <div class="hero-meeting"><strong>6:00–6:30 PM PT</strong><span>Rong / Eric’s team weekly sync</span></div>
+              </div>
+            </li>
+            <li><strong>Respond when routed</strong><span>Leo or Junjie will reach out if an urgent design question needs help.</span></li>
+          </ul>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="section" id="work">
+          <div class="section-head single">
+            <div><span class="section-pill">02 · Weekly updates</span></div>
+          </div>
+          <div class="source-gateway">
+            <div>
+              <h3>Amy’s weekly design updates</h3>
+              <p>Amy’s weekly report is the best way to understand current status. It shows the development owner, recent decisions, useful links, and project history from July onward.</p>
+              <div class="link-row"><a class="link-chip" href="file:///Users/amychen/weekly-update-agent/amy-weekly-update.html">Open weekly report ↗</a></div>
+            </div>
+            <div class="report-preview" aria-label="Preview of Amy’s weekly design updates">
+              <img src="foundry-devex-transition-assets/amy-weekly-design-updates-preview.png" alt="Amy’s Design Update showing current work grouped by lifecycle stage">
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="evolution">
+          <div class="section-head stacked">
+            <div><span class="section-pill">03 · Extension evolution</span><h2>From two extensions to one Foundry Toolkit.</h2></div>
+            <p class="section-deck">The current Toolkit brings the former AI Toolkit and Microsoft Foundry extension capabilities together in one VS Code extension.</p>
+          </div>
+          <div class="plain-block">
+            <h3>How consolidation happened</h3>
+            <ul class="micro-list">
+              <li><strong>May 2024</strong> — AI Toolkit reached general availability.</li>
+              <li><strong>March 2025</strong> — The separate Azure AI Foundry extension reached general availability.</li>
+              <li><strong>April 16, 2026</strong> — AI Toolkit became Microsoft Foundry Toolkit for VS Code v1.0.</li>
+              <li><strong>May–August 2026</strong> — The former Microsoft Foundry extension capabilities moved into the Toolkit. Microsoft Learn documented the consolidated extension by August 25.</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <span class="callout-icon">≠</span>
+            <div>
+              <h3>Do not join the old and new metric lines</h3>
+              <p>Historical AI Toolkit MAU and the later rolling 28-day Foundry-specific usage measure different scopes. Label the metric definition whenever reporting a trend.</p>
+            </div>
+          </div>
+          <div class="link-row">
+            <a class="link-chip" href="https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/get-started-projects-vs-code" target="_blank" rel="noreferrer">Current Toolkit overview ↗</a>
+          </div>
+        </section>
+
+        <section class="section" id="vscode-surface">
+          <div class="section-head stacked">
+            <div><span class="section-pill">04 · VS Code surface</span><h2>Why the editor experience is distinct.</h2></div>
+            <p class="section-deck">Foundry Toolkit keeps agent work close to the repository, development environment, and GitHub Copilot.</p>
+          </div>
+          <div class="plain-block">
+            <ul class="micro-list">
+              <li><strong>Work where the code lives</strong> — Build against the project and repository context already open in VS Code.</li>
+              <li><strong>Use an integrated AI workflow</strong> — Connect GitHub Copilot, models, agents, and developer tools without switching to a separate browser workflow.</li>
+              <li><strong>Inspect behavior while building</strong> — Use Agent Inspector to review runs, tool calls, traces, and intermediate outputs.</li>
+              <li><strong>Continue through the lifecycle</strong> — Prototype, test, debug, evaluate, and deploy from the development environment.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="developer-surfaces">
+          <div class="section-head stacked">
+            <div><span class="section-pill">05 · Developer surfaces</span><h2>One platform, three ways to work.</h2></div>
+            <p class="section-deck">The surfaces overlap. The right starting point depends on whether the work is visual, repository-centered, or automated.</p>
+          </div>
+          <div class="grid grid-3">
+            <article class="card soft">
+              <span class="card-label">Visual</span>
+              <h3>Foundry portal</h3>
+              <p>Use the browser to explore models, configure and test agents, review deployed behavior, and work with broader administration and governance.</p>
+            </article>
+            <article class="card accent">
+              <span class="card-label">Integrated</span>
+              <h3>Foundry Toolkit for VS Code</h3>
+              <p>Use the editor and repository context to build, debug, test, evaluate, and iteratively deploy.</p>
+            </article>
+            <article class="card soft">
+              <span class="card-label">Automated</span>
+              <h3>Foundry CLI / <code>azd ai</code></h3>
+              <p>Use terminal-first commands for repeatable workflows, scripts, and CI/CD automation.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="telemetry">
+          <div class="section-head stacked">
+            <div><span class="section-pill">06 · Reach &amp; adoption</span><h2>What the latest signals tell us.</h2></div>
+            <p class="section-deck">The available evidence shows broad Marketplace reach and part of the journey from creating an agent to inspecting how it runs.</p>
+          </div>
+          <div class="grid grid-3">
+            <article class="card soft">
+              <span class="card-label">Marketplace reach · Sep 11</span>
+              <h3>1,391,574 installs</h3>
+              <p>A cumulative distribution signal—not active users or retention.</p>
+            </article>
+            <article class="card accent">
+              <span class="card-label">Agent creation · Jul 11–Aug 7</span>
+              <h3>~1,100 devices</h3>
+              <p>Successfully scaffolded an agent during the reporting window.</p>
+            </article>
+            <article class="card soft">
+              <span class="card-label">Agent Inspector · Jul 11–Aug 7</span>
+              <h3>~29% attempted</h3>
+              <p>About 26% connected successfully; about 71% did not attempt Inspector.</p>
+            </article>
+          </div>
+          <div class="plain-block">
+            <h3>How to read the product impact</h3>
+            <ul class="micro-list">
+              <li><strong>The extension has broad reach</strong> — The Marketplace count shows how widely the Toolkit has been distributed, but not how often people use it.</li>
+              <li><strong>Agent creation is happening inside VS Code</strong> — The scaffolding count is the clearest recent product-specific signal of people beginning the agent-development journey.</li>
+              <li><strong>Inspection is not yet a default next step</strong> — Most devices that scaffolded an agent did not attempt Agent Inspector during the same reporting window.</li>
+              <li><strong>Agent Builder resonates in research</strong> — In a small May study, all seven participants quickly chose “Design an Agent without Code.” Treat this as qualitative feedback, not an adoption percentage.</li>
+            </ul>
+          </div>
+          <div class="link-row">
+            <a class="link-chip" href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B8C5D039F-FCF9-4D05-AB38-2C50528DDEDD%7D&amp;file=Foundry%20Developer%20Experience.pptx&amp;action=edit&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">September Developer Experience deck ↗</a>
+            <a class="link-chip" href="https://teams.microsoft.com/l/meetingrecap?driveId=b%21hz3BGTt75E2vhyVNaeJ4ExDtBl67IOA_MrZ4E6Nka05pr5drcMoGh7894MOHNZ_R&amp;driveItemId=01L5PST6KAHVFTK4FXSRF2T4ZS6NSHNPPB&amp;sitePath=https%3A%2F%2Fmicrosoft.sharepoint.com%2Fteams%2FRongEShanghai%2F" target="_blank" rel="noreferrer">Inspector funnel source ↗</a>
+          </div>
+        </section>
+
+        <section class="section" id="rhythm">
+          <div class="section-head stacked">
+            <div><span class="section-pill">07 · How the team works</span><h2>Collaboration and prototyping.</h2></div>
+          </div>
+          <div class="plain-block">
+            <h3>How the team collaborates</h3>
+            <ul class="micro-list">
+              <li><strong>Sync live</strong> — For larger design meetings, kickoffs, and design reviews.</li>
+              <li><strong>Work asynchronously</strong> — Keep most Q&amp;A and follow-up reviews async because of the time difference.</li>
+            </ul>
+          </div>
+          <div class="plain-block">
+            <h3>How Amy creates prototypes</h3>
+            <ul class="micro-list">
+              <li><strong>Figma</strong> — Quick, small-scope features, early concepts, and fit-and-finish notes. <a href="#resource-design">Browse Figma files</a>.</li>
+              <li><strong>Main production repo</strong> — Small features, UI improvements, and fit-and-finish work that can merge directly into production. <a href="https://github.com/microsoft/Skylight" target="_blank" rel="noreferrer">Open Skylight ↗</a>.</li>
+              <li><strong>Coded prototypes</strong> — Larger end-to-end flow explorations with more complex interactions and many variants. <a href="#resource-vscode-prototypes">VS Code examples</a> · <a href="#resource-copilot-app-prototypes">GitHub Copilot App examples</a>.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="planning">
+          <div class="section-head stacked">
+            <div><span class="section-pill">08 · Monthly planning</span><h2>How planning works today.</h2></div>
+            <div>
+              <p class="section-deck">The monthly rhythm moves from backlog review to capacity planning and shared decisions about how work is distributed.</p>
+              <div class="link-row"><a class="link-chip" href="https://loop.cloud.microsoft/p/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC1kZi5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2RlZmI4NDVkLWYyOWMtNDRjZC05OTlmLTVjYzdhMzc1ZjVhMT9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJrTlRVQ1UxUm1SbFptSTRORFZrSlRKRVpqSTVZeVV5UkRRMFkyUWxNa1E1T1RsbUpUSkVOV05qTjJFek56Vm1OV0V4Sm1ROVlpVXlNVbFpWVkRjemNIcDVlbFZUV200eGVraHZNMWd4YjFKck1ISlVZVFowWm5CR2RHeFdiRWg2Y3lVeVJGRkVRVXg2T0RWbk9UUnZiRk5aYlRoTlRVZzJVSEExYmlabVBUQXhTa3RUVmtkS1JFbEpVa3cwTkU5Sk5VTkNRa3BNTWpkRU1sRTJRVlpHTmtnbVl6MGxNa1kifQ%3D%3D" target="_blank" rel="noreferrer">September planning Loop ↗</a></div>
+            </div>
+          </div>
+          <div class="process-strip" aria-label="Monthly planning process">
+            <div class="process-step"><span>Start of month</span><strong>PM + engineering review the backlog</strong><small>Priorities are reviewed in the shared Loop.</small></div>
+            <span class="process-arrow">→</span>
+            <div class="process-step"><span>Planning sync</span><strong>Amy aligns with PM</strong><small>Clarify priorities, scope, timing, and dependencies.</small></div>
+            <span class="process-arrow">→</span>
+            <div class="process-step"><span>Capacity + distribution</span><strong>Amy leads planning with Jaeyong</strong><small>Plan capacity, then decide together how work is distributed.</small></div>
+          </div>
+          <div class="callout"><span class="callout-icon">↗</span><div><h3>Paulo is working on involving design earlier</h3></div></div>
+        </section>
+
+        <section class="section" id="people">
+          <div class="section-head single">
+            <div><span class="section-pill">09 · People</span><h2>Product and engineering partners.</h2></div>
+          </div>
+          <div class="org-group">
+            <div class="org-group-head"><h3>Core PM partners</h3></div>
+            <div class="portrait-grid">
+              <figure class="portrait"><img src="foundry-devex-transition-assets/fc48d67360e868acc64af6331aa6093a400ca2c7.png" alt="Org cards for Rong Lu and Leo Yao"><figcaption>Redmond office</figcaption></figure>
+              <figure class="portrait"><img src="foundry-devex-transition-assets/de2fc3aa1809d5c6756f04acb7f2ed638ca63730.png" alt="Org cards for Zhidi Shang and Junjie Li"><figcaption>Shanghai office</figcaption></figure>
+            </div>
+          </div>
+          <div class="org-group">
+            <div class="org-group-head"><h3>Core engineering partners</h3></div>
+            <div class="portrait-grid">
+              <figure class="portrait"><img src="foundry-devex-transition-assets/91093d290afb8bd1113828b7377bfc9cc6c70537.png" alt="Engineering org chart for Zhen Jiao and Jason Zhu's team"><figcaption>Shanghai office</figcaption></figure>
+              <figure class="portrait"><img src="foundry-devex-transition-assets/b9fa92126433f05b07a6acf22a7210637a5a4947.png" alt="Engineering org chart for Eric Chen's team"><figcaption>Shanghai office</figcaption></figure>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="access">
+          <div class="section-head stacked">
+            <div><span class="section-pill">10 · Repository access</span><h2>Private source. Public release.</h2></div>
+            <p class="section-deck">Send Kai Yang your GitHub ID to request Skylight access.</p>
+          </div>
+          <div class="grid grid-2">
+            <article class="card accent"><span class="card-label">Build here · private</span><h3><code>microsoft/Skylight</code></h3><ul class="micro-list"><li>Primary production source</li><li>Access required before implementation</li></ul><div class="link-row"><a class="link-chip" href="https://github.com/microsoft/Skylight" target="_blank" rel="noreferrer">Open repo ↗</a></div></article>
+            <article class="card"><span class="card-label">Release here · public</span><h3><code>microsoft/foundry-toolkit</code></h3><ul class="micro-list"><li>Packaged artifacts and releases</li><li>Not the complete development source</li></ul><div class="link-row"><a class="link-chip" href="https://github.com/microsoft/foundry-toolkit" target="_blank" rel="noreferrer">Open repo ↗</a></div></article>
+          </div>
+        </section>
+
+        <section class="section" id="vsc-ui">
+          <div class="section-head stacked">
+            <div><span class="section-pill">11 · VS Code UI system</span><h2>One shared layer between Fluent and VS Code.</h2></div>
+            <p class="section-deck"><code>vsc-ui-react</code> prevents every feature from rebuilding the same styling and interaction decisions.</p>
+          </div>
+          <div class="system-map" aria-label="vsc-ui-react system architecture">
+            <div class="system-stack">
+              <div class="stack-layer accent"><strong>VscButton · VscInput · VscTabList</strong><span>Reusable wrappers and documented patterns</span></div>
+              <div class="stack-layer"><strong>Fluent UI</strong><span>Behavior, interaction states, and accessibility</span></div>
+              <div class="stack-layer"><strong>VS Code tokens</strong><span>Theme, density, spacing, and visual language</span></div>
+            </div>
+            <div class="system-companions">
+              <div class="companion"><strong>Storybook</strong><span>Reference implementation</span></div>
+              <div class="companion"><strong>Figma</strong><span>Design specifications</span></div>
+            </div>
+          </div>
+          <div class="decision-grid">
+            <div class="decision-item"><strong>Why it started</strong>The retired Webview UI Toolkit left teams creating local Fluent overrides.</div>
+            <div class="decision-item"><strong>What it provides</strong>Shared npm components, tokens, states, documentation, and examples.</div>
+            <div class="decision-item"><strong>Current caveat</strong>Substantially implemented; complete legacy migration is not proven.</div>
+          </div>
+          <details style="margin-top:24px">
+            <summary>History, ownership, and current caveats</summary>
+            <div class="details-body">
+              <div class="timeline" aria-label="vsc-ui-react timeline">
+                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Feb 2026</span><div class="timeline-body"><h3>Problem defined</h3><p>Amy proposed customized Fluent 2 components as the scalable replacement for the retired toolkit.</p></div></div>
+                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Mar</span><div class="timeline-body"><h3>Package + Storybook established</h3><p>Hui published the package; Amy added components, documentation, and adoption guidance.</p></div></div>
+                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Apr–Jun</span><div class="timeline-body"><h3>Migration and inventory expanded</h3><p>Kham implemented specifications; Dana consolidated and expanded Storybook.</p></div></div>
+                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Jul</span><div class="timeline-body"><h3>Planned set reported complete</h3><p>Polish, legacy replacement, and CoreAI integration remained.</p></div></div>
+              </div>
+              <ul class="micro-list">
+                <li>Amy: design and system originator</li>
+                <li>Hui: engineering publisher and reviewer</li>
+                <li>Kham + Dana: implementation and Storybook contributors</li>
+                <li>Reconfirm the current maintenance DRI before assigning ownership</li>
+                <li>Watch CSS specificity, theme coverage, manual Figma sync, and remaining legacy callsites</li>
+              </ul>
+            </div>
+          </details>
+          <details style="margin-top:12px">
+            <summary>New designer contribution checklist</summary>
+            <div class="details-body">
+              <ol>
+                <li>Start with Figma and Storybook; reuse an existing component when possible.</li>
+                <li>For gaps, map Fluent behavior to VS Code conventions and CSS tokens.</li>
+                <li>Validate light, dark, and high-contrast states.</li>
+                <li>Update Storybook and Figma, then request design and engineering review.</li>
+                <li>Migrate production callsites through a separate Skylight PR when appropriate.</li>
+              </ol>
+            </div>
+          </details>
+          <div class="link-row">
+            <a class="link-chip" href="https://www.npmjs.com/package/vsc-ui-react?activeTab=readme" target="_blank" rel="noreferrer">npm package ↗</a>
+            <a class="link-chip" href="https://purple-dune-053405210.2.azurestaticapps.net/?path=/story/introduction--introduction" target="_blank" rel="noreferrer">Storybook ↗</a>
+            <a class="link-chip" href="https://github.com/vuxhub/vsc-ui-react" target="_blank" rel="noreferrer">Later package repo ↗</a>
+            <a class="link-chip" href="https://github.com/huimiu/vsc-ui-react/tree/main" target="_blank" rel="noreferrer">Original package repo ↗</a>
+            <a class="link-chip" href="https://www.figma.com/design/PVnsq5lh8xuXyt1g7e0euL/Fluent--%3E-VSCode-style?m=auto&node-id=1-420&t=iiLr1ZAHMr9ommHz-1" target="_blank" rel="noreferrer">Figma library ↗</a>
+            <a class="link-chip" href="https://m365.cloud.microsoft/chat/pages/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC5jb20vY29udGVudHN0b3JhZ2UveDhGTk8teHRza3VDUlgyX2ZNVEhMWmFqZ19zMnlNdEtwYVhmNGwwZXVOaz9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJuZzRSazVQSlRKRWVIUnphM1ZEVWxneUpUVkdaazFVU0V4YVlXcG5KVFZHY3pKNVRYUkxjR0ZZWmpSc01HVjFUbXNtWkQxaUpUSXhjMEZTVURoNVZTVTFSbGxWUTNvM05WRk5jRlpSTUZORVowdEVZMWxVWVZOa1JHMTVXbFpJWnpWRlNXWnZZVGR3WlZGdFlUWTBVelZKYm5KbFozRkNaRGt3Sm1ZOU1ERTBSRkJVU2t0WlJsZE1SVWhQTmtaT1IxSkRXVUZWVnpSUlFVSTJRbEpGU0NaalBTVXlSZyJ9?auth=2&EntityRepresentationId=fe0a7a90-5e49-4f3b-9810-2906f15c10d6" target="_blank" rel="noreferrer">Authoritative Loop ↗</a>
+          </div>
+        </section>
+
+        <section class="section" id="resources">
+          <div class="section-head stacked">
+            <div><span class="section-pill">12 · Resource library</span></div>
+          </div>
+          <div class="resource-grid" id="resourceGrid">
+            <article class="resource" data-search="team context product foundry developer experience"><span class="resource-type">Team context</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/foundry-developer-experience/" target="_blank" rel="noreferrer">Foundry Developer Experience overview</a><p>Product area, connected experiences, and demos.</p></article>
+            <article class="resource" data-search="team context september developer experience deck surfaces marketplace telemetry"><span class="resource-type">Team context</span><a href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B8C5D039F-FCF9-4D05-AB38-2C50528DDEDD%7D&amp;file=Foundry%20Developer%20Experience.pptx&amp;action=edit&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Foundry Developer Experience deck</a><p>Current product-surface framing and Marketplace context, updated September 2026.</p></article>
+            <article class="resource" data-search="figma vscode designs post build foundry toolkit extension"><span class="resource-type">Figma · VS Code</span><a href="https://www.figma.com/design/5j8RcCHJiPBmf2G219FJcR/Post-Build-%7C-Foundry-Toolkit-VSCode-Extension?node-id=17403-60044&t=MfhIk5A7sUXEO9GA-1" target="_blank" rel="noreferrer">Post-Build · Foundry Toolkit VS Code Extension</a><p>Primary VS Code design file for early exploration and fit-and-finish notes.</p></article>
+            <article class="resource" data-search="figma github copilot app extension foundry toolkit design"><span class="resource-type">Figma · Copilot App</span><a href="https://www.figma.com/design/WgicT9n54olQ1e5pigVRNe/Github-Copilot-App-Extension-%7C-Foundry-Toolkit-Extension?node-id=15332-161369&t=oYZ4nPofbawf9JkE-1" target="_blank" rel="noreferrer">GitHub Copilot App Extension · Foundry Toolkit</a><p>Primary GitHub Copilot App design file.</p></article>
+            <article class="resource" data-search="figma fluent vscode style design system vsc ui react components"><span class="resource-type">Figma · design system</span><a href="https://www.figma.com/design/PVnsq5lh8xuXyt1g7e0euL/Fluent--%3E-VSCode-style?m=auto&node-id=1-420&t=iiLr1ZAHMr9ommHz-1" target="_blank" rel="noreferrer">Fluent → VS Code component library</a><p>Shared component specifications for <code>vsc-ui-react</code>.</p></article>
+            <article class="resource" data-search="september planning loop priorities owners status"><span class="resource-type">Internal planning</span><a href="https://loop.cloud.microsoft/p/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC1kZi5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2RlZmI4NDVkLWYyOWMtNDRjZC05OTlmLTVjYzdhMzc1ZjVhMT9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJrTlRVQ1UxUm1SbFptSTRORFZrSlRKRVpqSTVZeVV5UkRRMFkyUWxNa1E1T1RsbUpUSkVOV05qTjJFek56Vm1OV0V4Sm1ROVlpVXlNVbFpWVkRjemNIcDVlbFZUV200eGVraHZNMWd4YjFKck1ISlVZVFowWm5CR2RHeFdiRWg2Y3lVeVJGRkVRVXg2T0RWbk9UUnZiRk5aYlRoTlRVZzJVSEExYmlabVBUQXhTa3RUVmtkS1JFbEpVa3cwTkU5Sk5VTkNRa3BNTWpkRU1sRTJRVlpHTmtnbVl6MGxNa1kifQ%3D%3D" target="_blank" rel="noreferrer">September 2026 planning Loop</a><p>Execution plan, ownership, status, and deadlines.</p></article>
+            <article class="resource" data-search="strategy july december pm rong devex"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BD23A6169-1F35-41BA-9DBD-1A4FD6A9E892%7D&file=Foundry%20Developer%20Experience%20Strategy%20%28July%20-%20Dec%202026%29.docx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noreferrer">Foundry DevEx strategy, July–December 2026</a><p>WIP PM strategy for the rest of the year.</p></article>
+            <article class="resource" data-search="apogee loop team strategy paulo mission principles"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/paulocoelho_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B12C45759-EA72-452A-89F6-065AFA10D7DF%7D&file=Apogee%20Loop%20-%20Team%20Strategy.docx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noreferrer">Apogee Loop — Team Strategy</a><p>Mission, ownership model, and core design philosophy.</p></article>
+            <article class="resource" data-search="amy weekly design update july august september local history"><span class="resource-type">Amy’s weekly report</span><a href="file:///Users/amychen/weekly-update-agent/amy-weekly-update.html">Amy’s weekly design updates</a><p>Detailed project history from July onward.</p></article>
+            <article class="resource" data-search="create agent research describe first study deck"><span class="resource-type">Research</span><a href="https://si-jin-chen.github.io/create-agent-study-deck/deck.html" target="_blank" rel="noreferrer">Create Agent research report</a><p>Evidence and describe-first direction behind the A/B-test plan.</p></article>
+            <article class="resource" data-search="vscode-prototype agent catalog create agent"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/agent-catalog/?preview=create-agent" target="_blank" rel="noreferrer">Create Agent / agent catalog</a><p>Agent catalog and Create Agent flow.</p></article>
+            <article class="resource" data-search="copilot-app-prototype agent canvas managed agent"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/copilot-agent-canvas-prototype/?iteration=agent-count&amp;format=step-by-step&amp;signIn=signed-out&amp;agent=new&amp;intent=clear&amp;agentCount=many&amp;frame=3" target="_blank" rel="noreferrer">GitHub Copilot App / agent canvas</a><p>Intent-driven creation and Managed Agent explorations.</p></article>
+            <article class="resource" data-search="vscode-prototype agent inspector runs turns"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-agent-inspector-prototype/?view=runs" target="_blank" rel="noreferrer">Agent Inspector</a><p>Turns, runs, and inspection workflow.</p></article>
+            <article class="resource" data-search="copilot-app-prototype validation report ci cd skipped resolved github action"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/validation-report-prototype/" target="_blank" rel="noreferrer">Foundry Validation Report</a><p>Loading, skipped, resolve, resolved, and all-passed states.</p></article>
+            <article class="resource" data-search="vsc ui react npm package component design system"><span class="resource-type">Package</span><a href="https://www.npmjs.com/package/vsc-ui-react?activeTab=readme" target="_blank" rel="noreferrer">vsc-ui-react on npm</a><p>Reusable VS Code-themed Fluent component layer.</p></article>
+            <article class="resource" data-search="storybook vsc ui react design system component documentation"><span class="resource-type">Documentation</span><a href="https://purple-dune-053405210.2.azurestaticapps.net/?path=/story/introduction--introduction" target="_blank" rel="noreferrer">VS Code UI React Storybook</a><p>Component variants, states, examples, and theme references.</p></article>
+            <article class="resource" data-search="vsc ui react loop authoritative story history"><span class="resource-type">Internal narrative</span><a href="https://m365.cloud.microsoft/chat/pages/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC5jb20vY29udGVudHN0b3JhZ2UveDhGTk8teHRza3VDUlgyX2ZNVEhMWmFqZ19zMnlNdEtwYVhmNGwwZXVOaz9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJuZzRSazVQSlRKRWVIUnphM1ZEVWxneUpUVkdaazFVU0V4YVlXcG5KVFZHY3pKNVRYUkxjR0ZZWmpSc01HVjFUbXNtWkQxaUpUSXhjMEZTVURoNVZTVTFSbGxWUTNvM05WRk5jRlpSTUZORVowdEVZMWxVWVZOa1JHMTVXbFpJWnpWRlNXWnZZVGR3WlZGdFlUWTBVelZKYm5KbFozRkNaRGt3Sm1ZOU1ERTBSRkJVU2t0WlJsZE1SVWhQTmtaT1IxSkRXVUZWVnpSUlFVSTJRbEpGU0NaalBTVXlSZyJ9?auth=2&EntityRepresentationId=fe0a7a90-5e49-4f3b-9810-2906f15c10d6" target="_blank" rel="noreferrer">VS Code Extension UI System (Unofficial).loop</a><p>Best single source for the package’s problem, resources, contributors, progress, and vision.</p></article>
+            <article class="resource" data-search="shared styling override fluent loop architecture mapping implementation"><span class="resource-type">Internal deep dive</span><a href="https://m365.cloud.microsoft/chat/pages/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC5jb20vY29udGVudHN0b3JhZ2UveDhGTk8teHRza3VDUlgyX2ZNVEhMWmFqZ19zMnlNdEtwYVhmNGwwZXVOaz9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJuZzRSazVQSlRKRWVIUnphM1ZEVWxneUpUVkdaazFVU0V4YVlXcG5KVFZHY3pKNVRYUkxjR0ZZWmpSc01HVjFUbXNtWkQxaUpUSXhjMEZTVURoNVZTVTFSbGxWUTNvM05WRk5jRlpSTUZORVowdEVZMWxVWVZOa1JHMTVXbFpJWnpWRlNXWnZZVGR3WlZGdFlUWTBVelZKYm5KbFozRkNaRGt3Sm1ZOU1ERTBSRkJVU2tzM05FazNVRFJFVUVwWU5GSkhNMEZhVTFWV1UwVk1URmMwUkNaalBTVXlSZyJ9?auth=2&EntityRepresentationId=90c37c16-7e0a-446f-b803-74365934b74a" target="_blank" rel="noreferrer">Shared VS Code Styling Override for Fluent 2.loop</a><p>Architecture problem, mapping rules, wrapper strategy, implementation phases, and launch resources.</p></article>
+            <article class="resource" data-search="skylight private repository source code github"><span class="resource-type">Private repository</span><a href="https://github.com/microsoft/Skylight" target="_blank" rel="noreferrer">microsoft/Skylight</a><p>Primary production development source.</p></article>
+            <article class="resource" data-search="foundry toolkit public release repository github"><span class="resource-type">Public repository</span><a href="https://github.com/microsoft/foundry-toolkit" target="_blank" rel="noreferrer">microsoft/foundry-toolkit</a><p>Packaged artifacts and release surface.</p></article>
+          </div>
+          <footer class="footer">Source note: researched from Amy’s July–September weekly updates, September planning, the September Foundry Developer Experience deck, July–August Toolkit telemetry reporting, M365 strategy documents and meeting metadata, Teams discussions, the VS Code UI System Loop, and the supplied org screenshots. The Word document remains a dated snapshot; this HTML is the canonical living guide.</footer>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const navLinks = [...document.querySelectorAll(".nav a")];
+    const sections = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+    const mobileNav = document.getElementById("mobileNav");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const hash = `#${entry.target.id}`;
+        navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === hash));
+        mobileNav.value = hash;
+      });
+    }, { rootMargin: "-20% 0px -70% 0px" });
+    sections.forEach(section => observer.observe(section));
+
+    mobileNav.addEventListener("change", event => {
+      document.querySelector(event.target.value)?.scrollIntoView({ behavior: "smooth" });
+    });
+    const animatePage = (section, direction) => {
+      const className = direction > 0 ? "page-enter-next" : "page-enter-previous";
+      section.classList.remove("page-enter-next", "page-enter-previous");
+      void section.offsetWidth;
+      section.classList.add(className);
+      section.addEventListener("animationend", () => section.classList.remove(className), { once: true });
+    };
+    const currentPageIndex = () => {
+      const activeHash = document.querySelector(".nav a.active")?.getAttribute("href");
+      const activeIndex = navLinks.findIndex(link => link.getAttribute("href") === activeHash);
+      if (activeIndex >= 0) return activeIndex;
+      return sections
+        .map(section => Math.abs(section.getBoundingClientRect().top - 48))
+        .reduce((best, distance, index, distances) => distance < distances[best] ? index : best, 0);
+    };
+    document.addEventListener("keydown", event => {
+      if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (event.target.closest("input, textarea, select, button, a, summary, [contenteditable='true']")) return;
+      if (!window.matchMedia("(min-width: 981px)").matches) return;
+
+      const direction = event.key === "ArrowRight" ? 1 : -1;
+      const nextIndex = Math.min(Math.max(currentPageIndex() + direction, 0), sections.length - 1);
+      const target = sections[nextIndex];
+      if (!target || nextIndex === currentPageIndex()) return;
+
+      event.preventDefault();
+      target.scrollIntoView({ behavior: "instant", block: "start" });
+      history.replaceState(null, "", `#${target.id}`);
+      navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${target.id}`));
+      mobileNav.value = `#${target.id}`;
+      animatePage(target, direction);
+    });
+
+    const resourceGrid = document.getElementById("resourceGrid");
+    const ungroupedResources = [...resourceGrid.querySelectorAll(".resource")];
+    const resourceGroups = [
+      {
+        id: "vscode-prototypes",
+        title: "VS Code prototypes",
+        description: "",
+        matches: text => text.includes("vscode-prototype")
+      },
+      {
+        id: "copilot-app-prototypes",
+        title: "GitHub Copilot App prototypes",
+        description: "",
+        matches: text => text.includes("copilot-app-prototype")
+      },
+      {
+        id: "design",
+        title: "Figma files",
+        description: "Useful for early exploration and fit-and-finish notes; prototypes usually carry the stronger interaction story.",
+        matches: text => text.includes("figma")
+      },
+      {
+        id: "planning",
+        title: "Planning & team context",
+        description: "Priority, ownership, strategy, and historical context when an urgent question needs more background.",
+        matches: text => /planning|strategy|weekly design update|team context/.test(text)
+      },
+      {
+        id: "technical",
+        title: "Technical & system references",
+        description: "Package, Storybook, source repositories, and the deeper history behind the VS Code UI system.",
+        matches: text => /package|storybook|vsc ui react loop|styling override|skylight|foundry toolkit public/.test(text)
+      },
+      {
+        id: "research",
+        title: "Research & evidence",
+        description: "Optional deeper evidence behind a specific product direction.",
+        matches: text => text.includes("research")
+      }
+    ];
+    resourceGrid.className = "resource-groups";
+    resourceGrid.replaceChildren();
+    resourceGroups.forEach(group => {
+      const section = document.createElement("section");
+      section.className = "resource-group";
+      section.dataset.resourceGroup = group.id;
+      section.id = `resource-${group.id}`;
+      const description = group.description ? `<p>${group.description}</p>` : "";
+      section.innerHTML = `<div class="resource-group-head"><h3>${group.title}</h3>${description}</div><div class="resource-grid"></div>`;
+      const grid = section.querySelector(".resource-grid");
+      ungroupedResources.filter(resource => group.matches(resource.dataset.search)).forEach(resource => grid.append(resource));
+      if (grid.children.length) resourceGrid.append(section);
+    });
+
+  </script>
+</body>
+</html>
