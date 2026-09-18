@@ -155,7 +155,51 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+    .nav-label-link {
+      display: block;
+      text-decoration: none;
+    }
+    .nav-label-link:hover,
+    .nav-label-link.active {
+      color: var(--cp-accent);
+    }
     .nav-label:first-of-type { margin-top: 0; }
+    .nav-section { margin-top: 24px; }
+    .nav-section-head {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin: 0 4px 8px 10px;
+    }
+    .nav-section-head .nav-label {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+    }
+    .nav-section-toggle {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--cp-text-muted);
+      cursor: pointer;
+    }
+    .nav-section-toggle:hover {
+      background: var(--cp-surface-soft);
+      color: var(--cp-accent);
+    }
+    .nav-section-toggle::before {
+      content: "›";
+      font-size: 20px;
+      line-height: 1;
+      transition: transform 140ms ease;
+    }
+    .nav-section-toggle[aria-expanded="true"]::before { transform: rotate(90deg); }
+    .nav-collapsible[hidden] { display: none; }
     .nav { display: grid; gap: 4px; }
     .nav a {
       display: flex;
@@ -185,11 +229,6 @@
       cursor: pointer;
     }
     .quiet-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
-    .sidebar-note {
-      margin-top: 20px;
-      color: var(--cp-text-muted);
-      font-size: 12px;
-    }
     .key-hint {
       display: flex;
       gap: 6px;
@@ -286,11 +325,10 @@
     .hero-points li { padding-left: 6px; }
     .hero-points li::marker { color: var(--cp-accent); }
     .hero-points strong { display: block; margin-bottom: 2px; }
-    .hero-points span { color: var(--cp-text-muted); }
-    .hero-point-context {
-      margin: 12px 0 0;
+    .hero-points > li > span,
+    .hero-point-copy {
       color: var(--cp-text-muted);
-      font-size: 14px;
+      font-size: 12px;
     }
     .hero-meeting-list {
       display: grid;
@@ -578,6 +616,8 @@
     }
     .timeline-body { padding: 0 0 0 4px; }
     .timeline-body p { color: var(--cp-text-muted); }
+    .timeline-note { display: block; margin-top: 6px; color: var(--cp-text-soft); font-size: 12px; }
+    .timeline-item:last-child { padding-bottom: 0; }
 
     .diagram {
       display: grid;
@@ -641,6 +681,31 @@
       border-radius: 14px;
       background: var(--cp-surface);
     }
+    .portrait-zoom {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: zoom-in;
+    }
+    .portrait-zoom::after {
+      content: "Click to zoom";
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      padding: 5px 8px;
+      border-radius: 8px;
+      background: rgba(25, 22, 31, 0.78);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 140ms ease;
+    }
+    .portrait-zoom:hover::after,
+    .portrait-zoom:focus-visible::after { opacity: 1; }
     .portrait img { display: block; width: 100%; height: auto; }
     .portrait figcaption { padding: 14px 18px; color: var(--cp-text-muted); font-size: 13px; }
 
@@ -681,6 +746,16 @@
     }
     .resource-group-head h3 { margin: 0; font-size: 24px; }
     .resource-group-head p { max-width: 520px; margin: 0; color: var(--cp-text-muted); font-size: 14px; }
+    .resource-group-head.repository-head {
+      justify-content: flex-start;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .resource-group-head.repository-head p {
+      max-width: none;
+      font-size: 11px;
+      line-height: 1.35;
+    }
     .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .resource {
       padding: 18px;
@@ -762,6 +837,198 @@
     }
     .plain-block + .plain-block { margin-top: 36px; }
     .plain-block h3 { margin-bottom: 0; }
+    #evolution .section-head h2 {
+      max-width: none;
+      font-size: clamp(32px, 3.75vw, 43px);
+    }
+    .extension-merge-map {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr)) repeat(3, minmax(0, 1.2fr));
+      grid-template-rows: auto auto auto;
+      gap: 12px;
+      align-items: stretch;
+      margin-top: 30px;
+    }
+    .extension-track {
+      display: block;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .extension-track.source-one {
+      grid-column: 1 / 9;
+      grid-row: 1;
+      border-color: #b9cff5;
+    }
+    .extension-track.source-two {
+      grid-column: 5 / 9;
+      grid-row: 2;
+      border-color: #acd9ca;
+    }
+    .track-label {
+      display: block;
+      margin-bottom: 10px;
+      padding: 0 2px;
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.45;
+      text-transform: uppercase;
+    }
+    .source-one .track-label {
+      color: #3f6fc3;
+    }
+    .source-two .track-label {
+      color: #327f67;
+    }
+    .track-events {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+      gap: 8px;
+      align-items: stretch;
+    }
+    .track-events.single { grid-template-columns: minmax(0, 1fr); }
+    .track-arrow {
+      display: grid;
+      place-content: center;
+      color: var(--cp-accent);
+      font-size: 18px;
+    }
+    .track-event {
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--cp-surface-soft);
+    }
+    .source-one .track-event { background: #f4f7fd; }
+    .source-two .track-event { background: #f3faf7; }
+    .track-event strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+    .track-event p {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .merge-card {
+      min-width: 0;
+      min-height: 238px;
+      padding: 18px 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface-soft);
+    }
+    .merge-card.unified {
+      grid-column: 10 / 13;
+      grid-row: 1 / 3;
+      padding-top: 18px;
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      box-shadow: 0 8px 24px rgba(108, 92, 231, 0.1);
+    }
+    .merge-arrow {
+      grid-column: 9 / 10;
+      grid-row: 1 / 3;
+      display: grid;
+      place-content: center;
+      color: var(--cp-accent);
+      text-align: center;
+    }
+    .merge-arrow span {
+      display: block;
+      margin-bottom: 4px;
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .merge-arrow strong {
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1;
+    }
+    .evolution-axis {
+      position: relative;
+      grid-column: 1 / 13;
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr)) repeat(3, minmax(0, 1.2fr));
+      padding-top: 18px;
+      color: var(--cp-text-soft);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .evolution-axis::before {
+      content: "";
+      position: absolute;
+      top: 5px;
+      right: 0;
+      left: 0;
+      height: 1px;
+      background: var(--cp-border);
+    }
+    .evolution-axis span {
+      position: relative;
+    }
+    .evolution-axis span::before {
+      content: "";
+      position: absolute;
+      top: -17px;
+      left: 0;
+      width: 7px;
+      height: 7px;
+      border: 2px solid var(--cp-bg);
+      border-radius: 50%;
+      background: var(--cp-accent);
+    }
+    .axis-2024 { grid-column: 1; }
+    .axis-2025 { grid-column: 5; }
+    .axis-2026 { grid-column: 10; }
+    .evolution-date {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+    .merge-card h3 {
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+    .merge-card p {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .merge-note {
+      display: block;
+      margin-top: 12px;
+      color: var(--cp-text-soft);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .merge-milestone + .merge-milestone {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--cp-border);
+    }
+    .merge-milestone strong {
+      display: block;
+      margin-bottom: 5px;
+    }
     .meeting-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -792,6 +1059,11 @@
       border: 1px solid var(--cp-border);
       border-radius: 14px;
       background: var(--cp-surface-soft);
+    }
+    .process-strip.planning-process {
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      gap: 8px;
+      padding: 18px;
     }
     .radar-panel {
       margin-top: 24px;
@@ -836,6 +1108,12 @@
     .process-step strong { display: block; }
     .process-step small { display: block; margin-top: 4px; color: var(--cp-text-muted); font-size: 13px; }
     .process-arrow { color: var(--cp-accent); font-size: 20px; }
+    .planning-note {
+      margin-top: 14px;
+      color: var(--cp-text-muted);
+      font-size: 12px;
+    }
+    .planning-note strong { color: var(--cp-text); }
     .wireframe {
       overflow: hidden;
       border: 1px solid var(--cp-border);
@@ -1001,6 +1279,259 @@
       width: 100%;
       height: auto;
     }
+    .extension-opener {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
+      gap: 48px;
+      align-items: center;
+      min-height: calc(100vh - 226px);
+    }
+    .extension-opener h2 {
+      max-width: none;
+      margin-top: 18px;
+    }
+    .extension-opener p {
+      margin-top: 20px;
+      color: var(--cp-text-muted);
+      font-size: 19px;
+      line-height: 1.45;
+    }
+    .extension-opener .opener-facts {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .extension-opener .opener-facts li + li { margin-top: 5px; }
+    .extension-opener-image {
+      overflow: hidden;
+      margin: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: #1f1f1f;
+      box-shadow: 0 16px 36px rgba(36, 31, 43, 0.14);
+    }
+    .extension-opener-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .canvas-experiences {
+      display: grid;
+      gap: 24px;
+    }
+    .canvas-experience {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(220px, 0.45fr);
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface);
+    }
+    .canvas-preview {
+      display: block;
+      overflow: hidden;
+      border-right: 1px solid var(--cp-border);
+      background: var(--cp-surface-soft);
+    }
+    .canvas-preview img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .canvas-copy {
+      align-self: center;
+      padding: 24px;
+    }
+    .canvas-copy span,
+    .canvas-opportunity span {
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .canvas-copy h3 {
+      margin-top: 10px;
+      font-size: 22px;
+    }
+    .canvas-copy p {
+      margin-top: 10px;
+      color: var(--cp-text-muted);
+      font-size: 14px;
+    }
+    .canvas-opportunity {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--cp-border);
+    }
+    .canvas-opportunity p {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 14px;
+    }
+    .consideration-carousel {
+      display: grid;
+      gap: 16px;
+    }
+    .carousel-stage {
+      position: relative;
+      overflow: hidden;
+      margin: 0;
+      border: 1px solid var(--cp-border);
+      border-radius: 14px;
+      background: var(--cp-surface-soft);
+      box-shadow: 0 16px 36px rgba(36, 31, 43, 0.1);
+    }
+    .carousel-zoom {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1248 / 768;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: zoom-in;
+    }
+    .carousel-zoom img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .carousel-zoom-label {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 9px;
+      background: rgba(25, 22, 31, 0.78);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .carousel-controls {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+    }
+    .carousel-button,
+    .lightbox-button {
+      display: inline-grid;
+      place-items: center;
+      min-width: 42px;
+      min-height: 42px;
+      padding: 8px 14px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .carousel-button:hover {
+      border-color: var(--cp-accent);
+      color: var(--cp-accent);
+    }
+    .carousel-position {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .carousel-dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: var(--cp-border-strong);
+      cursor: pointer;
+    }
+    .carousel-dot[aria-current="true"] {
+      width: 20px;
+      border-radius: 999px;
+      background: var(--cp-accent);
+    }
+    .slide-lightbox {
+      width: 100vw;
+      max-width: none;
+      height: 100vh;
+      max-height: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: rgba(25, 22, 31, 0.96);
+      color: #ffffff;
+    }
+    .slide-lightbox::backdrop { background: rgba(25, 22, 31, 0.96); }
+    .lightbox-layout {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) 64px;
+      grid-template-rows: 64px minmax(0, 1fr) 56px;
+      width: 100%;
+      height: 100%;
+      padding: 12px;
+    }
+    .lightbox-close {
+      grid-column: 3;
+      justify-self: end;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+    .lightbox-previous,
+    .lightbox-next {
+      align-self: center;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      font-size: 24px;
+    }
+    .lightbox-previous { grid-column: 1; grid-row: 2; }
+    .lightbox-next { grid-column: 3; grid-row: 2; }
+    .lightbox-image-wrap {
+      display: grid;
+      grid-column: 2;
+      grid-row: 2;
+      place-items: center;
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+    }
+    .lightbox-image {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 22px 64px rgba(0, 0, 0, 0.42);
+    }
+    .lightbox-counter {
+      grid-column: 2;
+      grid-row: 3;
+      align-self: center;
+      justify-self: center;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+      font-weight: 600;
+    }
     .artifact-ladder {
       display: grid;
       grid-template-columns: 1fr auto 1fr auto 1fr;
@@ -1132,6 +1663,24 @@
     }
     .resource a { font-weight: 600; }
     .resource p { margin-top: 7px; color: var(--cp-text-muted); font-size: 13px; }
+    .resource-title-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+    .resource-access {
+      display: inline-flex;
+      padding: 2px 7px;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 999px;
+      color: var(--cp-text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
     .mobile-bar { display: none; }
     .footer {
       padding: 40px 0 20px;
@@ -1189,18 +1738,41 @@
       }
       .section-head { grid-template-columns: 1fr; gap: 16px; }
       .grid-3 { grid-template-columns: 1fr; }
+      .extension-merge-map { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .extension-track.source-one,
+      .extension-track.source-two,
+      .merge-arrow,
+      .merge-card.unified,
+      .evolution-axis {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .evolution-axis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .axis-2024 { grid-column: 1; }
+      .axis-2025 { grid-column: 2; }
+      .axis-2026 { grid-column: 3; }
+      .merge-arrow { min-height: 36px; }
+      .merge-arrow strong { transform: rotate(90deg); }
+      .merge-card { min-height: 0; }
       .principle { grid-template-columns: 1fr; }
       .action-grid, .decision-grid, .route-grid { grid-template-columns: 1fr; }
       .action-card { min-height: 0; }
       .action-number { margin-bottom: 24px; }
       .work-board { grid-template-columns: 1fr; }
       .source-gateway { grid-template-columns: 1fr; }
+      .extension-opener {
+        grid-template-columns: 1fr;
+        min-height: 0;
+      }
+      .lightbox-layout { grid-template-columns: 52px minmax(0, 1fr) 52px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .page-enter-next, .page-enter-previous { animation: none; }
     }
     @media (max-width: 760px) {
       .hero-meta, .grid-2, .portrait-grid, .resource-grid, .scope-split, .meeting-grid, .system-map { grid-template-columns: 1fr; }
+      .track-events { grid-template-columns: 1fr; }
+      .track-arrow { transform: rotate(90deg); }
       .hero-meeting-list { grid-template-columns: 1fr; }
       .journey { grid-template-columns: 1fr; }
       .journey-arrow { transform: rotate(90deg); text-align: center; }
@@ -1210,6 +1782,8 @@
       .wireframe-grid { grid-template-columns: 1fr; }
       .wireframe-pane { border-right: 0; border-bottom: 1px solid var(--cp-border); }
       .wireframe-pane:last-child { border-bottom: 0; }
+      .canvas-experience { grid-template-columns: 1fr; }
+      .canvas-preview { border-right: 0; border-bottom: 1px solid var(--cp-border); }
       .template-row { grid-template-columns: 32px minmax(0, 1fr); }
       .template-line { grid-column: 2; }
       .timeline-item { grid-template-columns: 38px minmax(0, 1fr); }
@@ -1221,6 +1795,14 @@
       .radar-head strong { display: block; margin-top: 6px; }
       .org-group-head { display: block; }
       .org-group-head p { margin-top: 5px; }
+      .carousel-position { gap: 8px; }
+      .carousel-dots { gap: 5px; }
+      .carousel-dot { width: 6px; height: 6px; }
+      .lightbox-layout {
+        grid-template-columns: 44px minmax(0, 1fr) 44px;
+        padding: 6px;
+      }
+      .lightbox-button { min-width: 38px; min-height: 38px; padding: 6px; }
     }
   </style>
 </head>
@@ -1234,32 +1816,39 @@
       <p class="nav-label">While Amy is away</p>
       <nav class="nav">
         <a href="#start"><span class="nav-index">01</span>Coverage & meetings</a>
-      </nav>
-      <p class="nav-label">Supporting context</p>
-      <nav class="nav">
         <a href="#work"><span class="nav-index">02</span>Weekly updates</a>
-      </nav>
-      <p class="nav-label">Product context</p>
-      <nav class="nav">
-        <a href="#evolution"><span class="nav-index">03</span>Extension evolution</a>
-        <a href="#vscode-surface"><span class="nav-index">04</span>VS Code surface</a>
-        <a href="#developer-surfaces"><span class="nav-index">05</span>Developer surfaces</a>
-        <a href="#telemetry"><span class="nav-index">06</span>Reach &amp; adoption</a>
       </nav>
       <p class="nav-label">Team context</p>
       <nav class="nav">
-        <a href="#rhythm"><span class="nav-index">07</span>How the team works</a>
-        <a href="#planning"><span class="nav-index">08</span>Monthly planning</a>
-        <a href="#people"><span class="nav-index">09</span>People</a>
-        <a href="#access"><span class="nav-index">10</span>Repository access</a>
-        <a href="#vsc-ui"><span class="nav-index">11</span>VS Code UI system</a>
+        <a href="#people"><span class="nav-index">03</span>People</a>
+        <a href="#rhythm"><span class="nav-index">04</span>How the team works</a>
+        <a href="#strategy"><span class="nav-index">05</span>Strategy</a>
+        <a href="#planning"><span class="nav-index">06</span>Monthly planning</a>
       </nav>
-      <p class="nav-label">Reference</p>
-      <nav class="nav">
-        <a href="#resources"><span class="nav-index">12</span>Resource library</a>
-      </nav>
+      <div class="nav-section" data-nav-section>
+        <div class="nav-section-head">
+          <a class="nav-label nav-label-link" href="#vscode-extension">VS Code extension</a>
+          <button class="nav-section-toggle" type="button" aria-expanded="false" aria-controls="vscode-nav-pages" aria-label="Toggle VS Code extension pages"></button>
+        </div>
+        <nav class="nav nav-collapsible" id="vscode-nav-pages" hidden>
+          <a href="#evolution"><span class="nav-index">08</span>Extension evolution</a>
+          <a href="#vscode-surface"><span class="nav-index">09</span>VS Code workspace</a>
+          <a href="#vscode-considerations"><span class="nav-index">10</span>Design considerations</a>
+          <a href="#vsc-ui"><span class="nav-index">11</span>VS Code UI system</a>
+          <a href="#vscode-links"><span class="nav-index">12</span>Resources</a>
+        </nav>
+      </div>
+      <div class="nav-section" data-nav-section>
+        <div class="nav-section-head">
+          <a class="nav-label nav-label-link" href="#github-copilot-app">GitHub Copilot app</a>
+          <button class="nav-section-toggle" type="button" aria-expanded="false" aria-controls="github-copilot-nav-pages" aria-label="Toggle GitHub Copilot app pages"></button>
+        </div>
+        <nav class="nav nav-collapsible" id="github-copilot-nav-pages" hidden>
+          <a href="#github-copilot-canvas"><span class="nav-index">14</span>Agent canvas</a>
+          <a href="#github-copilot-links"><span class="nav-index">15</span>Resources</a>
+        </nav>
+      </div>
       <div class="key-hint"><kbd>←</kbd><kbd>→</kbd><span>Move between pages</span></div>
-      <p class="sidebar-note">Canonical living guide. Last researched September 16, 2026.</p>
     </aside>
 
     <main id="top">
@@ -1268,16 +1857,19 @@
         <select id="mobileNav" aria-label="Jump to section">
           <option value="#start">Coverage & meetings</option>
           <option value="#work">Weekly updates</option>
-          <option value="#evolution">Extension evolution</option>
-          <option value="#vscode-surface">VS Code surface</option>
-          <option value="#developer-surfaces">Developer surfaces</option>
-          <option value="#telemetry">Reach &amp; adoption</option>
-          <option value="#rhythm">How the team works</option>
-          <option value="#planning">Monthly planning</option>
           <option value="#people">People</option>
-          <option value="#access">Repository access</option>
+          <option value="#rhythm">How the team works</option>
+          <option value="#strategy">Strategy</option>
+          <option value="#planning">Monthly planning</option>
+          <option value="#vscode-extension">Foundry Toolkit</option>
+          <option value="#evolution">Extension evolution</option>
+          <option value="#vscode-surface">VS Code workspace</option>
+          <option value="#vscode-considerations">Design considerations</option>
           <option value="#vsc-ui">VS Code UI system</option>
-          <option value="#resources">Resource library</option>
+          <option value="#vscode-links">VS Code resources</option>
+          <option value="#github-copilot-app">GitHub Copilot app</option>
+          <option value="#github-copilot-canvas">GitHub Copilot app canvas</option>
+          <option value="#github-copilot-links">GitHub Copilot app resources</option>
         </select>
       </div>
 
@@ -1294,8 +1886,7 @@
           <ul class="hero-points">
             <li>
               <strong>Join or catch up</strong>
-              <span>Attend the Monday syncs live, or watch the recordings later—both are after 5 PM PT.</span>
-              <p class="hero-point-context">PM and engineering share what is top of mind. Design discussions usually continue offline with the relevant partners in a smaller group.</p>
+              <div class="hero-point-copy">Attend the Monday syncs live, or watch the recordings later—both are after 5 PM PT. PM and engineering share what is top of mind. Design discussions usually continue offline with the relevant partners in a smaller group.</div>
               <div class="hero-meeting-list">
                 <div class="hero-meeting"><strong>5:00–6:00 PM PT</strong><span>Rong / Shanghai weekly sync</span></div>
                 <div class="hero-meeting"><strong>6:00–6:30 PM PT</strong><span>Rong / Eric’s team weekly sync</span></div>
@@ -1323,111 +1914,29 @@
           </div>
         </section>
 
-        <section class="section" id="evolution">
-          <div class="section-head stacked">
-            <div><span class="section-pill">03 · Extension evolution</span><h2>From two extensions to one Foundry Toolkit.</h2></div>
-            <p class="section-deck">The current Toolkit brings the former AI Toolkit and Microsoft Foundry extension capabilities together in one VS Code extension.</p>
+        <section class="section" id="people">
+          <div class="section-head single">
+            <div><span class="section-pill">03 · People</span><h2>Product and engineering partners.</h2></div>
           </div>
-          <div class="plain-block">
-            <h3>How consolidation happened</h3>
-            <ul class="micro-list">
-              <li><strong>May 2024</strong> — AI Toolkit reached general availability.</li>
-              <li><strong>March 2025</strong> — The separate Azure AI Foundry extension reached general availability.</li>
-              <li><strong>April 16, 2026</strong> — AI Toolkit became Microsoft Foundry Toolkit for VS Code v1.0.</li>
-              <li><strong>May–August 2026</strong> — The former Microsoft Foundry extension capabilities moved into the Toolkit. Microsoft Learn documented the consolidated extension by August 25.</li>
-            </ul>
-          </div>
-          <div class="callout">
-            <span class="callout-icon">≠</span>
-            <div>
-              <h3>Do not join the old and new metric lines</h3>
-              <p>Historical AI Toolkit MAU and the later rolling 28-day Foundry-specific usage measure different scopes. Label the metric definition whenever reporting a trend.</p>
+          <div class="org-group">
+            <div class="org-group-head"><h3>Core PM partners</h3></div>
+            <div class="portrait-grid">
+              <figure class="portrait"><button class="portrait-zoom" type="button" aria-label="Expand org cards for Rong Lu and Leo Yao"><img src="foundry-devex-transition-assets/fc48d67360e868acc64af6331aa6093a400ca2c7.png" alt="Org cards for Rong Lu and Leo Yao"></button><figcaption>Redmond office</figcaption></figure>
+              <figure class="portrait"><button class="portrait-zoom" type="button" aria-label="Expand org cards for Zhidi Shang and Junjie Li"><img src="foundry-devex-transition-assets/de2fc3aa1809d5c6756f04acb7f2ed638ca63730.png" alt="Org cards for Zhidi Shang and Junjie Li"></button><figcaption>Shanghai office</figcaption></figure>
             </div>
           </div>
-          <div class="link-row">
-            <a class="link-chip" href="https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/get-started-projects-vs-code" target="_blank" rel="noreferrer">Current Toolkit overview ↗</a>
-          </div>
-        </section>
-
-        <section class="section" id="vscode-surface">
-          <div class="section-head stacked">
-            <div><span class="section-pill">04 · VS Code surface</span><h2>Why the editor experience is distinct.</h2></div>
-            <p class="section-deck">Foundry Toolkit keeps agent work close to the repository, development environment, and GitHub Copilot.</p>
-          </div>
-          <div class="plain-block">
-            <ul class="micro-list">
-              <li><strong>Work where the code lives</strong> — Build against the project and repository context already open in VS Code.</li>
-              <li><strong>Use an integrated AI workflow</strong> — Connect GitHub Copilot, models, agents, and developer tools without switching to a separate browser workflow.</li>
-              <li><strong>Inspect behavior while building</strong> — Use Agent Inspector to review runs, tool calls, traces, and intermediate outputs.</li>
-              <li><strong>Continue through the lifecycle</strong> — Prototype, test, debug, evaluate, and deploy from the development environment.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="section" id="developer-surfaces">
-          <div class="section-head stacked">
-            <div><span class="section-pill">05 · Developer surfaces</span><h2>One platform, three ways to work.</h2></div>
-            <p class="section-deck">The surfaces overlap. The right starting point depends on whether the work is visual, repository-centered, or automated.</p>
-          </div>
-          <div class="grid grid-3">
-            <article class="card soft">
-              <span class="card-label">Visual</span>
-              <h3>Foundry portal</h3>
-              <p>Use the browser to explore models, configure and test agents, review deployed behavior, and work with broader administration and governance.</p>
-            </article>
-            <article class="card accent">
-              <span class="card-label">Integrated</span>
-              <h3>Foundry Toolkit for VS Code</h3>
-              <p>Use the editor and repository context to build, debug, test, evaluate, and iteratively deploy.</p>
-            </article>
-            <article class="card soft">
-              <span class="card-label">Automated</span>
-              <h3>Foundry CLI / <code>azd ai</code></h3>
-              <p>Use terminal-first commands for repeatable workflows, scripts, and CI/CD automation.</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="section" id="telemetry">
-          <div class="section-head stacked">
-            <div><span class="section-pill">06 · Reach &amp; adoption</span><h2>What the latest signals tell us.</h2></div>
-            <p class="section-deck">The available evidence shows broad Marketplace reach and part of the journey from creating an agent to inspecting how it runs.</p>
-          </div>
-          <div class="grid grid-3">
-            <article class="card soft">
-              <span class="card-label">Marketplace reach · Sep 11</span>
-              <h3>1,391,574 installs</h3>
-              <p>A cumulative distribution signal—not active users or retention.</p>
-            </article>
-            <article class="card accent">
-              <span class="card-label">Agent creation · Jul 11–Aug 7</span>
-              <h3>~1,100 devices</h3>
-              <p>Successfully scaffolded an agent during the reporting window.</p>
-            </article>
-            <article class="card soft">
-              <span class="card-label">Agent Inspector · Jul 11–Aug 7</span>
-              <h3>~29% attempted</h3>
-              <p>About 26% connected successfully; about 71% did not attempt Inspector.</p>
-            </article>
-          </div>
-          <div class="plain-block">
-            <h3>How to read the product impact</h3>
-            <ul class="micro-list">
-              <li><strong>The extension has broad reach</strong> — The Marketplace count shows how widely the Toolkit has been distributed, but not how often people use it.</li>
-              <li><strong>Agent creation is happening inside VS Code</strong> — The scaffolding count is the clearest recent product-specific signal of people beginning the agent-development journey.</li>
-              <li><strong>Inspection is not yet a default next step</strong> — Most devices that scaffolded an agent did not attempt Agent Inspector during the same reporting window.</li>
-              <li><strong>Agent Builder resonates in research</strong> — In a small May study, all seven participants quickly chose “Design an Agent without Code.” Treat this as qualitative feedback, not an adoption percentage.</li>
-            </ul>
-          </div>
-          <div class="link-row">
-            <a class="link-chip" href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B8C5D039F-FCF9-4D05-AB38-2C50528DDEDD%7D&amp;file=Foundry%20Developer%20Experience.pptx&amp;action=edit&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">September Developer Experience deck ↗</a>
-            <a class="link-chip" href="https://teams.microsoft.com/l/meetingrecap?driveId=b%21hz3BGTt75E2vhyVNaeJ4ExDtBl67IOA_MrZ4E6Nka05pr5drcMoGh7894MOHNZ_R&amp;driveItemId=01L5PST6KAHVFTK4FXSRF2T4ZS6NSHNPPB&amp;sitePath=https%3A%2F%2Fmicrosoft.sharepoint.com%2Fteams%2FRongEShanghai%2F" target="_blank" rel="noreferrer">Inspector funnel source ↗</a>
+          <div class="org-group">
+            <div class="org-group-head"><h3>Core engineering partners</h3></div>
+            <div class="portrait-grid">
+              <figure class="portrait"><button class="portrait-zoom" type="button" aria-label="Expand engineering org chart for Zhen Jiao and Jason Zhu's team"><img src="foundry-devex-transition-assets/91093d290afb8bd1113828b7377bfc9cc6c70537.png" alt="Engineering org chart for Zhen Jiao and Jason Zhu's team"></button><figcaption>Shanghai office</figcaption></figure>
+              <figure class="portrait"><button class="portrait-zoom" type="button" aria-label="Expand engineering org chart for Eric Chen's team"><img src="foundry-devex-transition-assets/b9fa92126433f05b07a6acf22a7210637a5a4947.png" alt="Engineering org chart for Eric Chen's team"></button><figcaption>Shanghai office</figcaption></figure>
+            </div>
           </div>
         </section>
 
         <section class="section" id="rhythm">
           <div class="section-head stacked">
-            <div><span class="section-pill">07 · How the team works</span><h2>Collaboration and prototyping.</h2></div>
+            <div><span class="section-pill">04 · How the team works</span><h2>Collaboration and prototyping.</h2></div>
           </div>
           <div class="plain-block">
             <h3>How the team collaborates</h3>
@@ -1439,165 +1948,355 @@
           <div class="plain-block">
             <h3>How Amy creates prototypes</h3>
             <ul class="micro-list">
-              <li><strong>Figma</strong> — Quick, small-scope features, early concepts, and fit-and-finish notes. <a href="#resource-design">Browse Figma files</a>.</li>
-              <li><strong>Main production repo</strong> — Small features, UI improvements, and fit-and-finish work that can merge directly into production. <a href="https://github.com/microsoft/Skylight" target="_blank" rel="noreferrer">Open Skylight ↗</a>.</li>
-              <li><strong>Coded prototypes</strong> — Larger end-to-end flow explorations with more complex interactions and many variants. <a href="#resource-vscode-prototypes">VS Code examples</a> · <a href="#resource-copilot-app-prototypes">GitHub Copilot App examples</a>.</li>
+              <li><strong>Figma</strong> — Quick, small-scope features, early concepts, and fit-and-finish notes. <a href="#vscode-links">Browse VS Code design files</a>.</li>
+              <li><strong>Main production repo</strong> — Small features, UI improvements, and fit-and-finish work that can merge directly into production. <a href="#vscode-links">Browse repositories</a>.</li>
+              <li><strong>Coded prototypes</strong> — Larger end-to-end flow explorations with more complex interactions and many variants. <a href="#vscode-links">VS Code examples</a> · <a href="#github-copilot-links">GitHub Copilot app examples</a>.</li>
             </ul>
+          </div>
+        </section>
+
+        <section class="section" id="strategy">
+          <div class="section-head stacked">
+            <div><span class="section-pill">05 · Strategy</span><h2>Key references.</h2></div>
+          </div>
+          <div class="resource-grid">
+            <article class="resource"><span class="resource-type">Team context</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/foundry-developer-experience/" target="_blank" rel="noreferrer">Foundry Developer Experience overview</a><p>Product area, connected experiences, and demos.</p></article>
+            <article class="resource"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BD23A6169-1F35-41BA-9DBD-1A4FD6A9E892%7D&amp;file=Foundry%20Developer%20Experience%20Strategy%20%28July%20-%20Dec%202026%29.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Foundry DevEx strategy, July–December 2026</a><p>WIP PM strategy for the rest of the year.</p></article>
+            <article class="resource"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/paulocoelho_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B12C45759-EA72-452A-89F6-065AFA10D7DF%7D&amp;file=Apogee%20Loop%20-%20Team%20Strategy.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Apogee Loop — Team Strategy</a><p>Mission, ownership model, and core design philosophy.</p></article>
+            <article class="resource"><span class="resource-type">Internal planning</span><a href="https://loop.cloud.microsoft/p/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC1kZi5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2RlZmI4NDVkLWYyOWMtNDRjZC05OTlmLTVjYzdhMzc1ZjVhMT9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJrTlRVQ1UxUm1SbFptSTRORFZrSlRKRVpqSTVZeVV5UkRRMFkyUWxNa1E1T1RsbUpUSkVOV05qTjJFek56Vm1OV0V4Sm1ROVlpVXlNVbFpWVkRjemNIcDVlbFZUV200eGVraHZNMWd4YjFKck1ISlVZVFowWm5CR2RHeFdiRWg2Y3lVeVJGRkVRVXg2T0RWbk9UUnZiRk5aYlRoTlRVZzJVSEExYmlabVBUQXhTa3RUVmtkS1JFbEpVa3cwTkU5Sk5VTkNRa3BNTWpkRU1sRTJRVlpHTmtnbVl6MGxNa1kifQ%3D%3D" target="_blank" rel="noreferrer">September 2026 planning Loop</a><p>Execution plan, ownership, status, and deadlines.</p></article>
           </div>
         </section>
 
         <section class="section" id="planning">
           <div class="section-head stacked">
-            <div><span class="section-pill">08 · Monthly planning</span><h2>How planning works today.</h2></div>
-            <div>
-              <p class="section-deck">The monthly rhythm moves from backlog review to capacity planning and shared decisions about how work is distributed.</p>
-              <div class="link-row"><a class="link-chip" href="https://loop.cloud.microsoft/p/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC1kZi5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2RlZmI4NDVkLWYyOWMtNDRjZC05OTlmLTVjYzdhMzc1ZjVhMT9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJrTlRVQ1UxUm1SbFptSTRORFZrSlRKRVpqSTVZeVV5UkRRMFkyUWxNa1E1T1RsbUpUSkVOV05qTjJFek56Vm1OV0V4Sm1ROVlpVXlNVbFpWVkRjemNIcDVlbFZUV200eGVraHZNMWd4YjFKck1ISlVZVFowWm5CR2RHeFdiRWg2Y3lVeVJGRkVRVXg2T0RWbk9UUnZiRk5aYlRoTlRVZzJVSEExYmlabVBUQXhTa3RUVmtkS1JFbEpVa3cwTkU5Sk5VTkNRa3BNTWpkRU1sRTJRVlpHTmtnbVl6MGxNa1kifQ%3D%3D" target="_blank" rel="noreferrer">September planning Loop ↗</a></div>
-            </div>
+            <div><span class="section-pill">06 · Monthly planning</span><h2>How planning works today.</h2></div>
+            <div class="link-row"><a class="link-chip" href="https://loop.cloud.microsoft/p/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC1kZi5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2RlZmI4NDVkLWYyOWMtNDRjZC05OTlmLTVjYzdhMzc1ZjVhMT9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJrTlRVQ1UxUm1SbFptSTRORFZrSlRKRVpqSTVZeVV5UkRRMFkyUWxNa1E1T1RsbUpUSkVOV05qTjJFek56Vm1OV0V4Sm1ROVlpVXlNVbFpWVkRjemNIcDVlbFZUV200eGVraHZNMWd4YjFKck1ISlVZVFowWm5CR2RHeFdiRWg2Y3lVeVJGRkVRVXg2T0RWbk9UUnZiRk5aYlRoTlRVZzJVSEExYmlabVBUQXhTa3RUVmtkS1JFbEpVa3cwTkU5Sk5VTkNRa3BNTWpkRU1sRTJRVlpHTmtnbVl6MGxNa1kifQ%3D%3D" target="_blank" rel="noreferrer">September planning Loop ↗</a></div>
           </div>
-          <div class="process-strip" aria-label="Monthly planning process">
-            <div class="process-step"><span>Start of month</span><strong>PM + engineering review the backlog</strong><small>Priorities are reviewed in the shared Loop.</small></div>
+          <div class="process-strip planning-process" aria-label="Monthly planning process">
+            <div class="process-step"><span>Backlog intake</span><strong>PM adds requests and ideas</strong><small>Different requests and ideas are added to the backlog.</small></div>
+            <span class="process-arrow">→</span>
+            <div class="process-step"><span>Prioritization</span><strong>PM + engineering leads review the board</strong><small>Prioritize the backlog together.</small></div>
             <span class="process-arrow">→</span>
             <div class="process-step"><span>Planning sync</span><strong>Amy aligns with PM</strong><small>Clarify priorities, scope, timing, and dependencies.</small></div>
             <span class="process-arrow">→</span>
             <div class="process-step"><span>Capacity + distribution</span><strong>Amy leads planning with Jaeyong</strong><small>Plan capacity, then decide together how work is distributed.</small></div>
           </div>
-          <div class="callout"><span class="callout-icon">↗</span><div><h3>Paulo is working on involving design earlier</h3></div></div>
+          <p class="planning-note"><strong>Side note:</strong> Paulo is working on involving design earlier.</p>
         </section>
 
-        <section class="section" id="people">
-          <div class="section-head single">
-            <div><span class="section-pill">09 · People</span><h2>Product and engineering partners.</h2></div>
-          </div>
-          <div class="org-group">
-            <div class="org-group-head"><h3>Core PM partners</h3></div>
-            <div class="portrait-grid">
-              <figure class="portrait"><img src="foundry-devex-transition-assets/fc48d67360e868acc64af6331aa6093a400ca2c7.png" alt="Org cards for Rong Lu and Leo Yao"><figcaption>Redmond office</figcaption></figure>
-              <figure class="portrait"><img src="foundry-devex-transition-assets/de2fc3aa1809d5c6756f04acb7f2ed638ca63730.png" alt="Org cards for Zhidi Shang and Junjie Li"><figcaption>Shanghai office</figcaption></figure>
+        <section class="section" id="vscode-extension">
+          <div class="extension-opener">
+            <div>
+              <span class="section-pill">07 · VS Code extension</span>
+              <h2>Foundry Toolkit for VS Code.</h2>
+              <ul class="opener-facts">
+                <li>Amy was the extension’s sole design support from 2025 through July 2026.</li>
+                <li>Jaeyong joined the work in July 2026.</li>
+              </ul>
+              <div class="link-row"><a class="link-chip" href="https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/get-started-projects-vs-code" target="_blank" rel="noreferrer">Foundry Toolkit documentation ↗</a></div>
             </div>
-          </div>
-          <div class="org-group">
-            <div class="org-group-head"><h3>Core engineering partners</h3></div>
-            <div class="portrait-grid">
-              <figure class="portrait"><img src="foundry-devex-transition-assets/91093d290afb8bd1113828b7377bfc9cc6c70537.png" alt="Engineering org chart for Zhen Jiao and Jason Zhu's team"><figcaption>Shanghai office</figcaption></figure>
-              <figure class="portrait"><img src="foundry-devex-transition-assets/b9fa92126433f05b07a6acf22a7210637a5a4947.png" alt="Engineering org chart for Eric Chen's team"><figcaption>Shanghai office</figcaption></figure>
-            </div>
+            <figure class="extension-opener-image">
+              <img src="foundry-devex-transition-assets/foundry-toolkit-vscode-marketplace.png" alt="Foundry Toolkit for VS Code extension details in the VS Code Marketplace">
+            </figure>
           </div>
         </section>
 
-        <section class="section" id="access">
+        <section class="section" id="evolution">
           <div class="section-head stacked">
-            <div><span class="section-pill">10 · Repository access</span><h2>Private source. Public release.</h2></div>
-            <p class="section-deck">Send Kai Yang your GitHub ID to request Skylight access.</p>
+            <div><span class="section-pill">08 · Extension evolution</span><h2>Two extensions became one.</h2></div>
           </div>
-          <div class="grid grid-2">
-            <article class="card accent"><span class="card-label">Build here · private</span><h3><code>microsoft/Skylight</code></h3><ul class="micro-list"><li>Primary production source</li><li>Access required before implementation</li></ul><div class="link-row"><a class="link-chip" href="https://github.com/microsoft/Skylight" target="_blank" rel="noreferrer">Open repo ↗</a></div></article>
-            <article class="card"><span class="card-label">Release here · public</span><h3><code>microsoft/foundry-toolkit</code></h3><ul class="micro-list"><li>Packaged artifacts and releases</li><li>Not the complete development source</li></ul><div class="link-row"><a class="link-chip" href="https://github.com/microsoft/foundry-toolkit" target="_blank" rel="noreferrer">Open repo ↗</a></div></article>
+          <div class="extension-merge-map" aria-label="AI Toolkit beginning in 2024 and AI Foundry beginning in 2025 before consolidating as one extension in a shared repository in 2026">
+            <article class="extension-track source-one">
+              <div class="track-label">Extension 1</div>
+              <div class="track-events single">
+                <div class="track-event">
+                  <span class="evolution-date">May 2024</span>
+                  <strong>AI Toolkit GA</strong>
+                  <p>The original VS Code toolkit reached general availability.</p>
+                </div>
+              </div>
+            </article>
+            <article class="extension-track source-two">
+              <div class="track-label">Extension 2</div>
+              <div class="track-events single">
+                <div class="track-event">
+                  <span class="evolution-date">March 2025</span>
+                  <strong>AI Foundry extension GA</strong>
+                  <p>A separate extension added Foundry project and deployment workflows.</p>
+                </div>
+              </div>
+            </article>
+            <div class="merge-arrow" aria-hidden="true"><span>Consolidate</span><strong>→</strong></div>
+            <article class="merge-card unified">
+              <span class="evolution-date">April 16, 2026</span>
+              <h3>Single extension, shared repository</h3>
+              <p>AI Toolkit and AI Foundry were packaged as one extension and brought into the same repository under the Foundry name.</p>
+              <small class="merge-note">The codebases still live in two large top-level folders, so this was repository consolidation rather than a full architectural merge.</small>
+            </article>
+            <div class="evolution-axis" aria-hidden="true">
+              <span class="axis-2024">2024</span>
+              <span class="axis-2025">2025</span>
+              <span class="axis-2026">2026</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="vscode-surface">
+          <div class="section-head stacked">
+            <div><span class="section-pill">09 · VS Code workspace</span><h2>Foundry beside the code.</h2></div>
+            <p class="section-deck">The extension brings project context, agent building, Copilot, and feedback into one workspace.</p>
+          </div>
+          <div class="wireframe" aria-label="Annotated VS Code workspace showing project context, Foundry Toolkit, and Copilot with inline feedback">
+            <div class="wireframe-toolbar"><strong>VS Code workspace</strong><span>Code-first</span></div>
+            <div class="wireframe-grid">
+              <div class="wireframe-pane">
+                <span class="wireframe-label">1 · Project context</span>
+                <ul class="file-list">
+                  <li>Source code</li>
+                  <li>Dependencies</li>
+                  <li>Configuration</li>
+                </ul>
+              </div>
+              <div class="wireframe-pane">
+                <span class="wireframe-label">2 · Foundry Toolkit</span>
+                <ul class="signal-list">
+                  <li>Agent</li>
+                  <li>Model</li>
+                  <li>Tools</li>
+                </ul>
+              </div>
+              <div class="wireframe-pane">
+                <span class="wireframe-label">3 · Copilot + feedback</span>
+                <div class="mock-message">Use the project context</div>
+                <div class="mock-message accent">Debug and fix inline</div>
+                <ul class="signal-list">
+                  <li>Terminal and validation output stay nearby</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="vscode-considerations">
+          <div class="section-head stacked">
+            <div><span class="section-pill">10 · Design considerations</span><h2>Designing for VS Code extensions.</h2></div>
+          </div>
+          <div class="consideration-carousel" id="considerationCarousel" aria-label="VS Code extension design considerations"
+            data-slide-1="foundry-devex-transition-assets/vscode-consideration-01.png"
+            data-slide-2="foundry-devex-transition-assets/vscode-consideration-02.png"
+            data-slide-3="foundry-devex-transition-assets/vscode-consideration-03.png"
+            data-slide-4="foundry-devex-transition-assets/vscode-consideration-04.png"
+            data-slide-5="foundry-devex-transition-assets/vscode-consideration-05.png"
+            data-slide-6="foundry-devex-transition-assets/vscode-consideration-06.png"
+            data-slide-7="foundry-devex-transition-assets/vscode-consideration-07.png"
+            data-slide-8="foundry-devex-transition-assets/vscode-consideration-08.png">
+            <figure class="carousel-stage">
+              <button class="carousel-zoom" type="button" aria-label="Open slide 1 in a larger view">
+                <img id="considerationSlide" alt="">
+              </button>
+              <span class="carousel-zoom-label" aria-hidden="true">Click to zoom</span>
+            </figure>
+            <div class="carousel-controls">
+              <button class="carousel-button" id="carouselPrevious" type="button" aria-label="Previous slide">←</button>
+              <div class="carousel-position">
+                <span id="carouselCounter">1 / 8</span>
+                <div class="carousel-dots" id="carouselDots" aria-label="Choose a slide"></div>
+              </div>
+              <button class="carousel-button" id="carouselNext" type="button" aria-label="Next slide">→</button>
+            </div>
           </div>
         </section>
 
         <section class="section" id="vsc-ui">
           <div class="section-head stacked">
-            <div><span class="section-pill">11 · VS Code UI system</span><h2>One shared layer between Fluent and VS Code.</h2></div>
-            <p class="section-deck"><code>vsc-ui-react</code> prevents every feature from rebuilding the same styling and interaction decisions.</p>
+            <div><span class="section-pill">11 · VS Code UI system</span><h2>Why the UI system started.</h2></div>
           </div>
-          <div class="system-map" aria-label="vsc-ui-react system architecture">
-            <div class="system-stack">
-              <div class="stack-layer accent"><strong>VscButton · VscInput · VscTabList</strong><span>Reusable wrappers and documented patterns</span></div>
-              <div class="stack-layer"><strong>Fluent UI</strong><span>Behavior, interaction states, and accessibility</span></div>
-              <div class="stack-layer"><strong>VS Code tokens</strong><span>Theme, density, spacing, and visual language</span></div>
-            </div>
-            <div class="system-companions">
-              <div class="companion"><strong>Storybook</strong><span>Reference implementation</span></div>
-              <div class="companion"><strong>Figma</strong><span>Design specifications</span></div>
-            </div>
+          <div class="timeline" aria-label="Origin and current state of the VS Code extension UI system">
+            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">2024</span><div class="timeline-body"><h3>The official toolkit was deprecated</h3><p>VS Code extensions no longer had an official UI component system.</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">The problem</span><div class="timeline-body"><h3>Two teams were solving the same problem separately</h3><p>Because Fluent did not look like VS Code, each extension team built its own CSS overrides. Once packaged together, those separate approaches made the combined extension feel even less consistent.</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Amy stepped up</span><div class="timeline-body"><h3>Designing and coding a shared layer</h3><p>Amy decided to design and code a component layer that makes Fluent feel native to VS Code, collaborating with Hui as the engineering reviewer.</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Today</span><div class="timeline-body"><h3>Basic components are published</h3><p>New extension features already use these components, and we have started replacing them in some older features.</p><small class="timeline-note">The remaining legacy cleanup and system iteration will continue as resources allow.</small></div></div>
           </div>
-          <div class="decision-grid">
-            <div class="decision-item"><strong>Why it started</strong>The retired Webview UI Toolkit left teams creating local Fluent overrides.</div>
-            <div class="decision-item"><strong>What it provides</strong>Shared npm components, tokens, states, documentation, and examples.</div>
-            <div class="decision-item"><strong>Current caveat</strong>Substantially implemented; complete legacy migration is not proven.</div>
-          </div>
-          <details style="margin-top:24px">
-            <summary>History, ownership, and current caveats</summary>
-            <div class="details-body">
-              <div class="timeline" aria-label="vsc-ui-react timeline">
-                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Feb 2026</span><div class="timeline-body"><h3>Problem defined</h3><p>Amy proposed customized Fluent 2 components as the scalable replacement for the retired toolkit.</p></div></div>
-                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Mar</span><div class="timeline-body"><h3>Package + Storybook established</h3><p>Hui published the package; Amy added components, documentation, and adoption guidance.</p></div></div>
-                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Apr–Jun</span><div class="timeline-body"><h3>Migration and inventory expanded</h3><p>Kham implemented specifications; Dana consolidated and expanded Storybook.</p></div></div>
-                <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Jul</span><div class="timeline-body"><h3>Planned set reported complete</h3><p>Polish, legacy replacement, and CoreAI integration remained.</p></div></div>
+          <div class="resource-groups">
+            <section class="resource-group">
+              <div class="resource-group-head"><h3>Resources</h3></div>
+              <div class="resource-grid">
+                <article class="resource"><span class="resource-type">Package</span><a href="https://www.npmjs.com/package/vsc-ui-react?activeTab=readme" target="_blank" rel="noreferrer">vsc-ui-react on npm</a><p>Published npm package.</p></article>
+                <article class="resource"><span class="resource-type">Repository</span><a href="https://github.com/huimiu/vsc-ui-react/tree/main" target="_blank" rel="noreferrer">vsc-ui-react repository</a><p>Source repository.</p></article>
+                <article class="resource"><span class="resource-type">Early draft · lower priority</span><a href="https://purple-dune-053405210.2.azurestaticapps.net/?path=/story/components-button--overview" target="_blank" rel="noreferrer">Visual / Dev Playground</a></article>
+                <article class="resource"><span class="resource-type">Figma · design system</span><a href="https://www.figma.com/design/PVnsq5lh8xuXyt1g7e0euL/Fluent--%3E-VSCode-style?m=auto&amp;node-id=1-420&amp;t=iiLr1ZAHMr9ommHz-1" target="_blank" rel="noreferrer">Fluent → VS Code component library</a><p>Shared component specifications for <code>vsc-ui-react</code>.</p></article>
               </div>
-              <ul class="micro-list">
-                <li>Amy: design and system originator</li>
-                <li>Hui: engineering publisher and reviewer</li>
-                <li>Kham + Dana: implementation and Storybook contributors</li>
-                <li>Reconfirm the current maintenance DRI before assigning ownership</li>
-                <li>Watch CSS specificity, theme coverage, manual Figma sync, and remaining legacy callsites</li>
-              </ul>
-            </div>
-          </details>
-          <details style="margin-top:12px">
-            <summary>New designer contribution checklist</summary>
-            <div class="details-body">
-              <ol>
-                <li>Start with Figma and Storybook; reuse an existing component when possible.</li>
-                <li>For gaps, map Fluent behavior to VS Code conventions and CSS tokens.</li>
-                <li>Validate light, dark, and high-contrast states.</li>
-                <li>Update Storybook and Figma, then request design and engineering review.</li>
-                <li>Migrate production callsites through a separate Skylight PR when appropriate.</li>
-              </ol>
-            </div>
-          </details>
+            </section>
+          </div>
           <div class="link-row">
-            <a class="link-chip" href="https://www.npmjs.com/package/vsc-ui-react?activeTab=readme" target="_blank" rel="noreferrer">npm package ↗</a>
-            <a class="link-chip" href="https://purple-dune-053405210.2.azurestaticapps.net/?path=/story/introduction--introduction" target="_blank" rel="noreferrer">Storybook ↗</a>
-            <a class="link-chip" href="https://github.com/vuxhub/vsc-ui-react" target="_blank" rel="noreferrer">Later package repo ↗</a>
-            <a class="link-chip" href="https://github.com/huimiu/vsc-ui-react/tree/main" target="_blank" rel="noreferrer">Original package repo ↗</a>
-            <a class="link-chip" href="https://www.figma.com/design/PVnsq5lh8xuXyt1g7e0euL/Fluent--%3E-VSCode-style?m=auto&node-id=1-420&t=iiLr1ZAHMr9ommHz-1" target="_blank" rel="noreferrer">Figma library ↗</a>
-            <a class="link-chip" href="https://m365.cloud.microsoft/chat/pages/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC5jb20vY29udGVudHN0b3JhZ2UveDhGTk8teHRza3VDUlgyX2ZNVEhMWmFqZ19zMnlNdEtwYVhmNGwwZXVOaz9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJuZzRSazVQSlRKRWVIUnphM1ZEVWxneUpUVkdaazFVU0V4YVlXcG5KVFZHY3pKNVRYUkxjR0ZZWmpSc01HVjFUbXNtWkQxaUpUSXhjMEZTVURoNVZTVTFSbGxWUTNvM05WRk5jRlpSTUZORVowdEVZMWxVWVZOa1JHMTVXbFpJWnpWRlNXWnZZVGR3WlZGdFlUWTBVelZKYm5KbFozRkNaRGt3Sm1ZOU1ERTBSRkJVU2t0WlJsZE1SVWhQTmtaT1IxSkRXVUZWVnpSUlFVSTJRbEpGU0NaalBTVXlSZyJ9?auth=2&EntityRepresentationId=fe0a7a90-5e49-4f3b-9810-2906f15c10d6" target="_blank" rel="noreferrer">Authoritative Loop ↗</a>
+            <a class="link-chip" href="https://microsoft.sharepoint.com/:fl:/g/contentstorage/x8FNO-xtskuCRX2_fMTHLZajg_s2yMtKpaXf4l0euNk/IQAFssh3eK00RYBS3IAD4MSHAYtqEZp27lylz2h9YZyKCcs?e=lqzYKQ&amp;nav=cz0lMkZjb250ZW50c3RvcmFnZSUyRng4Rk5PLXh0c2t1Q1JYMl9mTVRITFphamdfczJ5TXRLcGFYZjRsMGV1TmsmZD1iJTIxc0FSUDh5VV9ZVUN6NzVRTXBWUTBTRGdLRGNZVGFTZERteVpWSGc1RUlmb2E3cGVRbWE2NFM1SW5yZWdxQmQ5MCZmPTAxNERQVEpLWUZXTEVITzZGTkdSQ1lBVVc0UUFCNkJSRUgmYz0lMkYmYT1Mb29wQXBwJnA9JTQwZmx1aWR4JTJGbG9vcC1wYWdlLWNvbnRhaW5lciZ4PSU3QiUyMnclMjIlM0ElMjJUMFJUVUh4dGFXTnliM052Wm5RdWMyaGhjbVZ3YjJsdWRDNWpiMjE4WWlGelFWSlFPSGxWWDFsVlEzbzNOVkZOY0ZaUk1GTkVaMHRFWTFsVVlWTmtSRzE1V2xaSVp6VkZTV1p2WVRkd1pWRnRZVFkwVXpWSmJuSmxaM0ZDWkRrd2ZEQXhORVJRVkVwTE0xZExOVkJFUkZvMFdrRktSbHBTVGxGU01qTTNTVUpJTkVZJTNEJTIyJTJDJTIyaSUyMiUzQSUyMjkwODdkYTc5LTI0ODEtNGZhMS04YzhlLTMxODVmN2ZjMjY0OSUyMiU3RA%3D%3D" target="_blank" rel="noreferrer">Read the full story in Loop ↗</a>
           </div>
         </section>
 
-        <section class="section" id="resources">
+        <section class="section" id="vscode-links">
           <div class="section-head stacked">
-            <div><span class="section-pill">12 · Resource library</span></div>
+            <div><span class="section-pill">12 · Resources</span><h2>VS Code resources.</h2></div>
           </div>
-          <div class="resource-grid" id="resourceGrid">
-            <article class="resource" data-search="team context product foundry developer experience"><span class="resource-type">Team context</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/foundry-developer-experience/" target="_blank" rel="noreferrer">Foundry Developer Experience overview</a><p>Product area, connected experiences, and demos.</p></article>
-            <article class="resource" data-search="team context september developer experience deck surfaces marketplace telemetry"><span class="resource-type">Team context</span><a href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B8C5D039F-FCF9-4D05-AB38-2C50528DDEDD%7D&amp;file=Foundry%20Developer%20Experience.pptx&amp;action=edit&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Foundry Developer Experience deck</a><p>Current product-surface framing and Marketplace context, updated September 2026.</p></article>
-            <article class="resource" data-search="figma vscode designs post build foundry toolkit extension"><span class="resource-type">Figma · VS Code</span><a href="https://www.figma.com/design/5j8RcCHJiPBmf2G219FJcR/Post-Build-%7C-Foundry-Toolkit-VSCode-Extension?node-id=17403-60044&t=MfhIk5A7sUXEO9GA-1" target="_blank" rel="noreferrer">Post-Build · Foundry Toolkit VS Code Extension</a><p>Primary VS Code design file for early exploration and fit-and-finish notes.</p></article>
-            <article class="resource" data-search="figma github copilot app extension foundry toolkit design"><span class="resource-type">Figma · Copilot App</span><a href="https://www.figma.com/design/WgicT9n54olQ1e5pigVRNe/Github-Copilot-App-Extension-%7C-Foundry-Toolkit-Extension?node-id=15332-161369&t=oYZ4nPofbawf9JkE-1" target="_blank" rel="noreferrer">GitHub Copilot App Extension · Foundry Toolkit</a><p>Primary GitHub Copilot App design file.</p></article>
-            <article class="resource" data-search="figma fluent vscode style design system vsc ui react components"><span class="resource-type">Figma · design system</span><a href="https://www.figma.com/design/PVnsq5lh8xuXyt1g7e0euL/Fluent--%3E-VSCode-style?m=auto&node-id=1-420&t=iiLr1ZAHMr9ommHz-1" target="_blank" rel="noreferrer">Fluent → VS Code component library</a><p>Shared component specifications for <code>vsc-ui-react</code>.</p></article>
-            <article class="resource" data-search="september planning loop priorities owners status"><span class="resource-type">Internal planning</span><a href="https://loop.cloud.microsoft/p/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC1kZi5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2RlZmI4NDVkLWYyOWMtNDRjZC05OTlmLTVjYzdhMzc1ZjVhMT9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJrTlRVQ1UxUm1SbFptSTRORFZrSlRKRVpqSTVZeVV5UkRRMFkyUWxNa1E1T1RsbUpUSkVOV05qTjJFek56Vm1OV0V4Sm1ROVlpVXlNVbFpWVkRjemNIcDVlbFZUV200eGVraHZNMWd4YjFKck1ISlVZVFowWm5CR2RHeFdiRWg2Y3lVeVJGRkVRVXg2T0RWbk9UUnZiRk5aYlRoTlRVZzJVSEExYmlabVBUQXhTa3RUVmtkS1JFbEpVa3cwTkU5Sk5VTkNRa3BNTWpkRU1sRTJRVlpHTmtnbVl6MGxNa1kifQ%3D%3D" target="_blank" rel="noreferrer">September 2026 planning Loop</a><p>Execution plan, ownership, status, and deadlines.</p></article>
-            <article class="resource" data-search="strategy july december pm rong devex"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BD23A6169-1F35-41BA-9DBD-1A4FD6A9E892%7D&file=Foundry%20Developer%20Experience%20Strategy%20%28July%20-%20Dec%202026%29.docx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noreferrer">Foundry DevEx strategy, July–December 2026</a><p>WIP PM strategy for the rest of the year.</p></article>
-            <article class="resource" data-search="apogee loop team strategy paulo mission principles"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/paulocoelho_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B12C45759-EA72-452A-89F6-065AFA10D7DF%7D&file=Apogee%20Loop%20-%20Team%20Strategy.docx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noreferrer">Apogee Loop — Team Strategy</a><p>Mission, ownership model, and core design philosophy.</p></article>
-            <article class="resource" data-search="amy weekly design update july august september local history"><span class="resource-type">Amy’s weekly report</span><a href="file:///Users/amychen/weekly-update-agent/amy-weekly-update.html">Amy’s weekly design updates</a><p>Detailed project history from July onward.</p></article>
-            <article class="resource" data-search="create agent research describe first study deck"><span class="resource-type">Research</span><a href="https://si-jin-chen.github.io/create-agent-study-deck/deck.html" target="_blank" rel="noreferrer">Create Agent research report</a><p>Evidence and describe-first direction behind the A/B-test plan.</p></article>
-            <article class="resource" data-search="vscode-prototype agent catalog create agent"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/agent-catalog/?preview=create-agent" target="_blank" rel="noreferrer">Create Agent / agent catalog</a><p>Agent catalog and Create Agent flow.</p></article>
-            <article class="resource" data-search="copilot-app-prototype agent canvas managed agent"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/copilot-agent-canvas-prototype/?iteration=agent-count&amp;format=step-by-step&amp;signIn=signed-out&amp;agent=new&amp;intent=clear&amp;agentCount=many&amp;frame=3" target="_blank" rel="noreferrer">GitHub Copilot App / agent canvas</a><p>Intent-driven creation and Managed Agent explorations.</p></article>
-            <article class="resource" data-search="vscode-prototype agent inspector runs turns"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-agent-inspector-prototype/?view=runs" target="_blank" rel="noreferrer">Agent Inspector</a><p>Turns, runs, and inspection workflow.</p></article>
-            <article class="resource" data-search="copilot-app-prototype validation report ci cd skipped resolved github action"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/validation-report-prototype/" target="_blank" rel="noreferrer">Foundry Validation Report</a><p>Loading, skipped, resolve, resolved, and all-passed states.</p></article>
-            <article class="resource" data-search="vsc ui react npm package component design system"><span class="resource-type">Package</span><a href="https://www.npmjs.com/package/vsc-ui-react?activeTab=readme" target="_blank" rel="noreferrer">vsc-ui-react on npm</a><p>Reusable VS Code-themed Fluent component layer.</p></article>
-            <article class="resource" data-search="storybook vsc ui react design system component documentation"><span class="resource-type">Documentation</span><a href="https://purple-dune-053405210.2.azurestaticapps.net/?path=/story/introduction--introduction" target="_blank" rel="noreferrer">VS Code UI React Storybook</a><p>Component variants, states, examples, and theme references.</p></article>
-            <article class="resource" data-search="vsc ui react loop authoritative story history"><span class="resource-type">Internal narrative</span><a href="https://m365.cloud.microsoft/chat/pages/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC5jb20vY29udGVudHN0b3JhZ2UveDhGTk8teHRza3VDUlgyX2ZNVEhMWmFqZ19zMnlNdEtwYVhmNGwwZXVOaz9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJuZzRSazVQSlRKRWVIUnphM1ZEVWxneUpUVkdaazFVU0V4YVlXcG5KVFZHY3pKNVRYUkxjR0ZZWmpSc01HVjFUbXNtWkQxaUpUSXhjMEZTVURoNVZTVTFSbGxWUTNvM05WRk5jRlpSTUZORVowdEVZMWxVWVZOa1JHMTVXbFpJWnpWRlNXWnZZVGR3WlZGdFlUWTBVelZKYm5KbFozRkNaRGt3Sm1ZOU1ERTBSRkJVU2t0WlJsZE1SVWhQTmtaT1IxSkRXVUZWVnpSUlFVSTJRbEpGU0NaalBTVXlSZyJ9?auth=2&EntityRepresentationId=fe0a7a90-5e49-4f3b-9810-2906f15c10d6" target="_blank" rel="noreferrer">VS Code Extension UI System (Unofficial).loop</a><p>Best single source for the package’s problem, resources, contributors, progress, and vision.</p></article>
-            <article class="resource" data-search="shared styling override fluent loop architecture mapping implementation"><span class="resource-type">Internal deep dive</span><a href="https://m365.cloud.microsoft/chat/pages/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC5jb20vY29udGVudHN0b3JhZ2UveDhGTk8teHRza3VDUlgyX2ZNVEhMWmFqZ19zMnlNdEtwYVhmNGwwZXVOaz9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJuZzRSazVQSlRKRWVIUnphM1ZEVWxneUpUVkdaazFVU0V4YVlXcG5KVFZHY3pKNVRYUkxjR0ZZWmpSc01HVjFUbXNtWkQxaUpUSXhjMEZTVURoNVZTVTFSbGxWUTNvM05WRk5jRlpSTUZORVowdEVZMWxVWVZOa1JHMTVXbFpJWnpWRlNXWnZZVGR3WlZGdFlUWTBVelZKYm5KbFozRkNaRGt3Sm1ZOU1ERTBSRkJVU2tzM05FazNVRFJFVUVwWU5GSkhNMEZhVTFWV1UwVk1URmMwUkNaalBTVXlSZyJ9?auth=2&EntityRepresentationId=90c37c16-7e0a-446f-b803-74365934b74a" target="_blank" rel="noreferrer">Shared VS Code Styling Override for Fluent 2.loop</a><p>Architecture problem, mapping rules, wrapper strategy, implementation phases, and launch resources.</p></article>
-            <article class="resource" data-search="skylight private repository source code github"><span class="resource-type">Private repository</span><a href="https://github.com/microsoft/Skylight" target="_blank" rel="noreferrer">microsoft/Skylight</a><p>Primary production development source.</p></article>
-            <article class="resource" data-search="foundry toolkit public release repository github"><span class="resource-type">Public repository</span><a href="https://github.com/microsoft/foundry-toolkit" target="_blank" rel="noreferrer">microsoft/foundry-toolkit</a><p>Packaged artifacts and release surface.</p></article>
+          <div class="resource-groups">
+            <section class="resource-group">
+              <div class="resource-group-head repository-head"><h3>Repositories</h3><p>Send Kai Yang your GitHub ID to request Skylight access.</p></div>
+              <div class="resource-grid">
+                <article class="resource"><div class="resource-title-row"><a href="https://github.com/microsoft/Skylight" target="_blank" rel="noreferrer"><code>microsoft/Skylight</code></a><span class="resource-access">Private</span></div><p>Primary production source. Access is required before implementation.</p></article>
+                <article class="resource"><div class="resource-title-row"><a href="https://github.com/microsoft/foundry-toolkit" target="_blank" rel="noreferrer"><code>microsoft/foundry-toolkit</code></a><span class="resource-access">Public</span></div><p>Packaged artifacts and releases, not the complete development source.</p></article>
+              </div>
+            </section>
+            <section class="resource-group">
+              <div class="resource-group-head"><h3>Design file</h3></div>
+              <div class="resource-grid">
+                <article class="resource"><span class="resource-type">Figma · VS Code</span><a href="https://www.figma.com/design/5j8RcCHJiPBmf2G219FJcR/Post-Build-%7C-Foundry-Toolkit-VSCode-Extension?node-id=17403-60044&amp;t=MfhIk5A7sUXEO9GA-1" target="_blank" rel="noreferrer">Post-Build · Foundry Toolkit VS Code Extension</a><p>Primary VS Code design file for early exploration and fit-and-finish notes.</p></article>
+              </div>
+            </section>
+            <section class="resource-group">
+              <div class="resource-group-head"><h3>Prototypes</h3></div>
+              <div class="resource-grid">
+                <article class="resource"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/agent-catalog/?preview=create-agent" target="_blank" rel="noreferrer">Create Agent / agent catalog</a><p>Agent catalog and Create Agent flow.</p></article>
+                <article class="resource"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-agent-inspector-prototype/?view=runs" target="_blank" rel="noreferrer">Agent Inspector</a><p>Turns, runs, and inspection workflow.</p></article>
+              </div>
+            </section>
           </div>
-          <footer class="footer">Source note: researched from Amy’s July–September weekly updates, September planning, the September Foundry Developer Experience deck, July–August Toolkit telemetry reporting, M365 strategy documents and meeting metadata, Teams discussions, the VS Code UI System Loop, and the supplied org screenshots. The Word document remains a dated snapshot; this HTML is the canonical living guide.</footer>
         </section>
+
+        <section class="section" id="github-copilot-app">
+          <div class="extension-opener">
+            <div>
+              <span class="section-pill">13 · GitHub Copilot app</span>
+              <h2>Foundry in the GitHub Copilot app.</h2>
+              <ul class="opener-facts">
+                <li>Work started in June 2026.</li>
+                <li>Amy is the design owner.</li>
+              </ul>
+            </div>
+            <figure class="extension-opener-image">
+              <img src="foundry-devex-transition-assets/github-copilot-app-customize.png" alt="GitHub Copilot app Customize page showing Microsoft Foundry as an installed extension">
+            </figure>
+          </div>
+        </section>
+
+        <section class="section" id="github-copilot-canvas">
+          <div class="section-head stacked">
+            <div><span class="section-pill">14 · Agent canvas</span><h2>Two types of canvas pages.</h2></div>
+            <p class="section-deck">Canvas uses Fluent as its design system.</p>
+          </div>
+          <div class="canvas-experiences">
+            <article class="canvas-experience">
+              <a class="canvas-preview" href="https://si-jin-chen.github.io/copilot-agent-canvas-prototype/?iteration=agent-count&amp;format=step-by-step&amp;signIn=signed-out&amp;agent=new&amp;intent=clear&amp;agentCount=many&amp;frame=3" target="_blank" rel="noreferrer" aria-label="Open the Create Agent and Agent Playground prototype">
+                <img src="foundry-devex-transition-assets/github-copilot-agent-canvas.png" alt="Create Agent guided setup beside the dynamic Agent Playground">
+              </a>
+              <div class="canvas-copy">
+                <span>01 · Create Agent</span>
+                <h3><a href="https://si-jin-chen.github.io/copilot-agent-canvas-prototype/?iteration=agent-count&amp;format=step-by-step&amp;signIn=signed-out&amp;agent=new&amp;intent=clear&amp;agentCount=many&amp;frame=3" target="_blank" rel="noreferrer">Guided setup + Agent Playground</a></h3>
+                <p>A guided setup view paired with a dynamic canvas for building and testing an agent.</p>
+              </div>
+            </article>
+            <article class="canvas-experience">
+              <a class="canvas-preview" href="https://si-jin-chen.github.io/validation-report-prototype/" target="_blank" rel="noreferrer" aria-label="Open the Foundry Validation Report prototype">
+                <img src="foundry-devex-transition-assets/github-copilot-validation-report.png" alt="Validation Report showing findings and resolution actions in the agent canvas">
+              </a>
+              <div class="canvas-copy">
+                <span>02 · Validation</span>
+                <h3><a href="https://si-jin-chen.github.io/validation-report-prototype/" target="_blank" rel="noreferrer">Validation Report</a></h3>
+                <p>Review findings and resolution states in the canvas.</p>
+              </div>
+            </article>
+          </div>
+          <div class="canvas-opportunity">
+            <span>Opportunity</span>
+            <p>Canvas could support more distinctive UI, such as an agent catalog.</p>
+          </div>
+        </section>
+
+        <section class="section" id="github-copilot-links">
+          <div class="section-head stacked">
+            <div><span class="section-pill">15 · Resources</span><h2>GitHub Copilot app resources.</h2></div>
+          </div>
+          <div class="resource-groups">
+            <section class="resource-group">
+              <div class="resource-group-head repository-head"><h3>Repository</h3><p>Send Kai Yang your GitHub ID to request Skylight access.</p></div>
+              <div class="resource-grid">
+                <article class="resource"><div class="resource-title-row"><a href="https://github.com/microsoft/Skylight/tree/main/microsoft-foundry-canvas" target="_blank" rel="noreferrer"><code>microsoft-foundry-canvas</code></a><span class="resource-access">Private</span></div><p>Source folder in Skylight.</p></article>
+              </div>
+            </section>
+            <section class="resource-group">
+              <div class="resource-group-head"><h3>Design file</h3></div>
+              <div class="resource-grid">
+                <article class="resource"><span class="resource-type">Figma · Copilot app</span><a href="https://www.figma.com/design/WgicT9n54olQ1e5pigVRNe/Github-Copilot-App-Extension-%7C-Foundry-Toolkit-Extension?node-id=15332-161369&amp;t=oYZ4nPofbawf9JkE-1" target="_blank" rel="noreferrer">GitHub Copilot App Extension · Foundry Toolkit</a><p>Primary GitHub Copilot app design file.</p></article>
+              </div>
+            </section>
+            <section class="resource-group">
+              <div class="resource-group-head"><h3>Prototypes</h3></div>
+              <div class="resource-grid">
+                <article class="resource"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/copilot-agent-canvas-prototype/?iteration=agent-count&amp;format=step-by-step&amp;signIn=signed-out&amp;agent=new&amp;intent=clear&amp;agentCount=many&amp;frame=3" target="_blank" rel="noreferrer">GitHub Copilot app / agent canvas</a><p>Intent-driven creation and Managed Agent explorations.</p></article>
+                <article class="resource"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/validation-report-prototype/" target="_blank" rel="noreferrer">Foundry Validation Report</a><p>Loading, skipped, resolve, resolved, and all-passed states.</p></article>
+              </div>
+            </section>
+          </div>
+        </section>
+
       </div>
     </main>
   </div>
 
+  <dialog class="slide-lightbox" id="slideLightbox" aria-label="Expanded VS Code design consideration">
+    <div class="lightbox-layout">
+      <button class="lightbox-button lightbox-close" id="lightboxClose" type="button" aria-label="Close larger view">×</button>
+      <button class="lightbox-button lightbox-previous" id="lightboxPrevious" type="button" aria-label="Previous slide">←</button>
+      <figure class="lightbox-image-wrap">
+        <img class="lightbox-image" id="lightboxImage" alt="">
+      </figure>
+      <button class="lightbox-button lightbox-next" id="lightboxNext" type="button" aria-label="Next slide">→</button>
+      <span class="lightbox-counter" id="lightboxCounter">1 / 8</span>
+    </div>
+  </dialog>
+
+  <dialog class="slide-lightbox" id="orgChartLightbox" aria-label="Expanded team screenshot">
+    <div class="lightbox-layout">
+      <button class="lightbox-button lightbox-close" id="orgChartClose" type="button" aria-label="Close larger view">×</button>
+      <button class="lightbox-button lightbox-previous" id="orgChartPrevious" type="button" aria-label="Previous team screenshot">←</button>
+      <figure class="lightbox-image-wrap">
+        <img class="lightbox-image" id="orgChartImage" alt="">
+      </figure>
+      <button class="lightbox-button lightbox-next" id="orgChartNext" type="button" aria-label="Next team screenshot">→</button>
+      <span class="lightbox-counter" id="orgChartCounter">1 / 4</span>
+    </div>
+  </dialog>
+
   <script>
-    const navLinks = [...document.querySelectorAll(".nav a")];
+    const navLinks = [...document.querySelectorAll(".nav a, .nav-label-link")];
     const sections = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
     const mobileNav = document.getElementById("mobileNav");
+    const navSections = [...document.querySelectorAll("[data-nav-section]")];
+    const setNavSectionExpanded = (navSection, expanded) => {
+      const toggle = navSection.querySelector(".nav-section-toggle");
+      const pages = navSection.querySelector(".nav-collapsible");
+      toggle.setAttribute("aria-expanded", String(expanded));
+      pages.hidden = !expanded;
+    };
+    const syncNavSections = hash => {
+      navSections.forEach(navSection => {
+        const ownsHash = [...navSection.querySelectorAll("a")].some(link => link.getAttribute("href") === hash);
+        setNavSectionExpanded(navSection, ownsHash);
+      });
+    };
+    navSections.forEach(navSection => {
+      navSection.querySelector(".nav-section-toggle").addEventListener("click", () => {
+        const shouldExpand = navSection.querySelector(".nav-section-toggle").getAttribute("aria-expanded") !== "true";
+        navSections.forEach(section => setNavSectionExpanded(section, shouldExpand && section === navSection));
+      });
+    });
+    syncNavSections(location.hash);
+    window.addEventListener("hashchange", () => syncNavSections(location.hash));
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const hash = `#${entry.target.id}`;
         navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === hash));
         mobileNav.value = hash;
+        syncNavSections(hash);
       });
     }, { rootMargin: "-20% 0px -70% 0px" });
     sections.forEach(section => observer.observe(section));
@@ -1613,7 +2312,7 @@
       section.addEventListener("animationend", () => section.classList.remove(className), { once: true });
     };
     const currentPageIndex = () => {
-      const activeHash = document.querySelector(".nav a.active")?.getAttribute("href");
+      const activeHash = document.querySelector(".nav a.active, .nav-label-link.active")?.getAttribute("href");
       const activeIndex = navLinks.findIndex(link => link.getAttribute("href") === activeHash);
       if (activeIndex >= 0) return activeIndex;
       return sections
@@ -1623,6 +2322,7 @@
     document.addEventListener("keydown", event => {
       if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
       if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (document.querySelector("dialog[open]")) return;
       if (event.target.closest("input, textarea, select, button, a, summary, [contenteditable='true']")) return;
       if (!window.matchMedia("(min-width: 981px)").matches) return;
 
@@ -1636,61 +2336,129 @@
       history.replaceState(null, "", `#${target.id}`);
       navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${target.id}`));
       mobileNav.value = `#${target.id}`;
+      syncNavSections(`#${target.id}`);
       animatePage(target, direction);
     });
 
-    const resourceGrid = document.getElementById("resourceGrid");
-    const ungroupedResources = [...resourceGrid.querySelectorAll(".resource")];
-    const resourceGroups = [
+    const considerationSlides = [
       {
-        id: "vscode-prototypes",
-        title: "VS Code prototypes",
-        description: "",
-        matches: text => text.includes("vscode-prototype")
+        alt: "We design within the IDE, not around it: interactive elements must be placed outside the code editor"
       },
       {
-        id: "copilot-app-prototypes",
-        title: "GitHub Copilot App prototypes",
-        description: "",
-        matches: text => text.includes("copilot-app-prototype")
+        alt: "We design within the IDE, not around it: collapse portal navigation and open code directly in the editor"
       },
       {
-        id: "design",
-        title: "Figma files",
-        description: "Useful for early exploration and fit-and-finish notes; prototypes usually carry the stronger interaction story.",
-        matches: text => text.includes("figma")
+        alt: "Navigating within VS Code's paradigm: evolving the tree view as the feature set grows"
       },
       {
-        id: "planning",
-        title: "Planning & team context",
-        description: "Priority, ownership, strategy, and historical context when an urgent question needs more background.",
-        matches: text => /planning|strategy|weekly design update|team context/.test(text)
+        alt: "Navigating within VS Code's paradigm: moving complex interactions from the command palette to full-page forms"
       },
       {
-        id: "technical",
-        title: "Technical & system references",
-        description: "Package, Storybook, source repositories, and the deeper history behind the VS Code UI system.",
-        matches: text => /package|storybook|vsc ui react loop|styling override|skylight|foundry toolkit public/.test(text)
+        alt: "Local testing shapes our core features by making downstream constraints visible"
       },
       {
-        id: "research",
-        title: "Research & evidence",
-        description: "Optional deeper evidence behind a specific product direction.",
-        matches: text => text.includes("research")
+        alt: "We're closer to the user's code, which supports inline debugging without context switching"
+      },
+      {
+        alt: "We're closer to the user's code, enabling skills from locally installed extensions"
+      },
+      {
+        alt: "Deeper Copilot integration unlocks guided experiences"
       }
     ];
-    resourceGrid.className = "resource-groups";
-    resourceGrid.replaceChildren();
-    resourceGroups.forEach(group => {
-      const section = document.createElement("section");
-      section.className = "resource-group";
-      section.dataset.resourceGroup = group.id;
-      section.id = `resource-${group.id}`;
-      const description = group.description ? `<p>${group.description}</p>` : "";
-      section.innerHTML = `<div class="resource-group-head"><h3>${group.title}</h3>${description}</div><div class="resource-grid"></div>`;
-      const grid = section.querySelector(".resource-grid");
-      ungroupedResources.filter(resource => group.matches(resource.dataset.search)).forEach(resource => grid.append(resource));
-      if (grid.children.length) resourceGrid.append(section);
+    const considerationCarousel = document.getElementById("considerationCarousel");
+    const considerationSlide = document.getElementById("considerationSlide");
+    const carouselCounter = document.getElementById("carouselCounter");
+    const carouselDots = document.getElementById("carouselDots");
+    const carouselZoom = document.querySelector(".carousel-zoom");
+    const slideLightbox = document.getElementById("slideLightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxCounter = document.getElementById("lightboxCounter");
+    let considerationSlideIndex = 0;
+
+    const updateConsiderationSlide = index => {
+      considerationSlideIndex = (index + considerationSlides.length) % considerationSlides.length;
+      const slide = considerationSlides[considerationSlideIndex];
+      const slideSource = considerationCarousel.dataset[`slide-${considerationSlideIndex + 1}`];
+      considerationSlide.src = slideSource;
+      considerationSlide.alt = slide.alt;
+      carouselZoom.setAttribute("aria-label", `Open slide ${considerationSlideIndex + 1} in a larger view`);
+      carouselCounter.textContent = `${considerationSlideIndex + 1} / ${considerationSlides.length}`;
+      [...carouselDots.children].forEach((dot, dotIndex) => {
+        dot.setAttribute("aria-current", dotIndex === considerationSlideIndex ? "true" : "false");
+      });
+      lightboxImage.src = slideSource;
+      lightboxImage.alt = slide.alt;
+      lightboxCounter.textContent = `${considerationSlideIndex + 1} / ${considerationSlides.length}`;
+    };
+    considerationSlides.forEach((_, index) => {
+      const dot = document.createElement("button");
+      dot.className = "carousel-dot";
+      dot.type = "button";
+      dot.setAttribute("aria-label", `Show slide ${index + 1}`);
+      dot.addEventListener("click", () => updateConsiderationSlide(index));
+      carouselDots.append(dot);
+    });
+    document.getElementById("carouselPrevious").addEventListener("click", () => updateConsiderationSlide(considerationSlideIndex - 1));
+    document.getElementById("carouselNext").addEventListener("click", () => updateConsiderationSlide(considerationSlideIndex + 1));
+    carouselZoom.addEventListener("click", () => {
+      updateConsiderationSlide(considerationSlideIndex);
+      slideLightbox.showModal();
+      document.getElementById("lightboxClose").focus();
+    });
+    document.getElementById("lightboxPrevious").addEventListener("click", () => updateConsiderationSlide(considerationSlideIndex - 1));
+    document.getElementById("lightboxNext").addEventListener("click", () => updateConsiderationSlide(considerationSlideIndex + 1));
+    document.getElementById("lightboxClose").addEventListener("click", () => slideLightbox.close());
+    slideLightbox.addEventListener("click", event => {
+      if (event.target === slideLightbox) slideLightbox.close();
+    });
+    slideLightbox.addEventListener("keydown", event => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        updateConsiderationSlide(considerationSlideIndex - 1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        updateConsiderationSlide(considerationSlideIndex + 1);
+      }
+    });
+    updateConsiderationSlide(0);
+
+    const orgChartButtons = [...document.querySelectorAll(".portrait-zoom")];
+    const orgChartLightbox = document.getElementById("orgChartLightbox");
+    const orgChartImage = document.getElementById("orgChartImage");
+    const orgChartCounter = document.getElementById("orgChartCounter");
+    let orgChartIndex = 0;
+
+    const updateOrgChart = index => {
+      orgChartIndex = (index + orgChartButtons.length) % orgChartButtons.length;
+      const sourceImage = orgChartButtons[orgChartIndex].querySelector("img");
+      orgChartImage.src = sourceImage.src;
+      orgChartImage.alt = sourceImage.alt;
+      orgChartCounter.textContent = `${orgChartIndex + 1} / ${orgChartButtons.length}`;
+    };
+    orgChartButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        updateOrgChart(index);
+        orgChartLightbox.showModal();
+        document.getElementById("orgChartClose").focus();
+      });
+    });
+    document.getElementById("orgChartPrevious").addEventListener("click", () => updateOrgChart(orgChartIndex - 1));
+    document.getElementById("orgChartNext").addEventListener("click", () => updateOrgChart(orgChartIndex + 1));
+    document.getElementById("orgChartClose").addEventListener("click", () => orgChartLightbox.close());
+    orgChartLightbox.addEventListener("click", event => {
+      if (event.target === orgChartLightbox) orgChartLightbox.close();
+    });
+    orgChartLightbox.addEventListener("keydown", event => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        updateOrgChart(orgChartIndex - 1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        updateOrgChart(orgChartIndex + 1);
+      }
     });
 
   </script>
