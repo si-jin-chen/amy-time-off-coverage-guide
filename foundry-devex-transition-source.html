@@ -614,6 +614,11 @@
       font-weight: 700;
       text-transform: uppercase;
     }
+    .timeline-date small {
+      display: block;
+      margin-top: 5px;
+      font: inherit;
+    }
     .timeline-body { padding: 0 0 0 4px; }
     .timeline-body p { color: var(--cp-text-muted); }
     .timeline-note { display: block; margin-top: 6px; color: var(--cp-text-soft); font-size: 12px; }
@@ -757,6 +762,7 @@
       line-height: 1.35;
     }
     .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .strategy-resource-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .resource {
       padding: 18px;
       border: 1px solid var(--cp-border);
@@ -1200,6 +1206,135 @@
       border-left: 3px solid var(--cp-accent);
       font-family: inherit;
       font-size: 13px;
+    }
+    .copilot-panel-mock {
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface-soft);
+    }
+    .copilot-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 11px;
+    }
+    .copilot-panel-head strong {
+      padding: 3px 8px;
+      border-radius: 5px;
+      background: var(--cp-border);
+      color: var(--cp-text);
+      font-size: 11px;
+    }
+    .copilot-session-title {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--cp-border);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .copilot-thread {
+      display: grid;
+      gap: 8px;
+      padding: 12px 10px;
+    }
+    .copilot-bubble {
+      max-width: 88%;
+      padding: 8px 9px;
+      border-radius: 8px;
+      color: var(--cp-text-muted);
+      background: var(--cp-surface);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .copilot-scribble {
+      display: block;
+      width: 72%;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--cp-border);
+    }
+    .copilot-scribble + .copilot-scribble { margin-top: 6px; }
+    .copilot-scribble.short { width: 48%; }
+    .copilot-bubble.user .copilot-scribble { margin-left: auto; background: rgba(97, 82, 216, 0.28); }
+    .copilot-bubble.user {
+      justify-self: end;
+      background: var(--cp-accent-soft);
+      color: var(--cp-text);
+    }
+    .copilot-composer {
+      margin: 0 10px 10px;
+      padding: 8px 9px;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+    }
+    .copilot-composer span,
+    .copilot-composer small { display: block; }
+    .copilot-composer span {
+      color: var(--cp-text-muted);
+      font-size: 10px;
+    }
+    .copilot-composer small {
+      margin-top: 8px;
+      color: var(--cp-accent);
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .explorer-mock {
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface-soft);
+    }
+    .explorer-title {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .explorer-row {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      color: var(--cp-text-muted);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 11px;
+    }
+    .explorer-row + .explorer-row { border-top: 1px solid rgba(224, 220, 240, 0.62); }
+    .explorer-row.indent-1 { padding-left: 24px; }
+    .explorer-row.indent-2 { padding-left: 42px; }
+    .copilot-action-mock {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 10px;
+      background: var(--cp-surface-soft);
+    }
+    .copilot-action {
+      padding: 10px 12px;
+      border: 1px solid var(--cp-accent);
+      border-radius: 7px;
+      background: var(--cp-accent);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .copilot-action.secondary {
+      background: var(--cp-surface);
+      color: var(--cp-accent);
     }
     .decision-grid {
       display: grid;
@@ -1663,6 +1798,70 @@
     }
     .resource a { font-weight: 600; }
     .resource p { margin-top: 7px; color: var(--cp-text-muted); font-size: 13px; }
+    .resource.resource-visual {
+      overflow: hidden;
+      padding: 0;
+    }
+    .resource-preview {
+      display: block;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      border-bottom: 1px solid var(--cp-border);
+      background: #1f1f1f;
+    }
+    .resource-preview img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+    .resource-copy { padding: 18px; }
+    .strategy-doc-preview {
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(145deg, rgba(97, 82, 216, 0.10), rgba(97, 82, 216, 0.02)),
+        var(--cp-bg-elevated);
+      text-decoration: none;
+    }
+    .strategy-doc-sheet {
+      width: 52%;
+      padding: 14px;
+      border: 1px solid var(--cp-border);
+      border-radius: 8px;
+      background: var(--cp-surface);
+      box-shadow: 0 8px 20px rgba(36, 31, 43, 0.08);
+    }
+    .strategy-doc-icon {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 12px;
+      border-radius: 5px;
+      background: #2b579a;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .strategy-doc-line {
+      display: block;
+      height: 5px;
+      margin-top: 7px;
+      border-radius: 999px;
+      background: var(--cp-border);
+    }
+    .strategy-doc-line.short { width: 64%; }
+    .strategy-doc-label {
+      display: block;
+      margin-top: 12px;
+      color: var(--cp-text-muted);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
     .resource-title-row {
       display: flex;
       align-items: center;
@@ -1686,6 +1885,10 @@
       padding: 40px 0 20px;
       color: var(--cp-text-muted);
       font-size: 13px;
+    }
+
+    @media (max-width: 1180px) {
+      .strategy-resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 980px) {
@@ -1832,7 +2035,7 @@
         </div>
         <nav class="nav nav-collapsible" id="vscode-nav-pages" hidden>
           <a href="#evolution"><span class="nav-index">08</span>Extension evolution</a>
-          <a href="#vscode-surface"><span class="nav-index">09</span>VS Code workspace</a>
+          <a href="#vscode-surface"><span class="nav-index">09</span>What Makes This Surface Unique</a>
           <a href="#vscode-considerations"><span class="nav-index">10</span>Design considerations</a>
           <a href="#vsc-ui"><span class="nav-index">11</span>VS Code UI system</a>
           <a href="#vscode-links"><span class="nav-index">12</span>Resources</a>
@@ -1863,7 +2066,7 @@
           <option value="#planning">Monthly planning</option>
           <option value="#vscode-extension">Foundry Toolkit</option>
           <option value="#evolution">Extension evolution</option>
-          <option value="#vscode-surface">VS Code workspace</option>
+          <option value="#vscode-surface">What Makes This Surface Unique</option>
           <option value="#vscode-considerations">Design considerations</option>
           <option value="#vsc-ui">VS Code UI system</option>
           <option value="#vscode-links">VS Code resources</option>
@@ -1948,8 +2151,8 @@
           <div class="plain-block">
             <h3>How Amy creates prototypes</h3>
             <ul class="micro-list">
-              <li><strong>Figma</strong> — Quick, small-scope features, early concepts, and fit-and-finish notes. <a href="#vscode-links">Browse VS Code design files</a>.</li>
-              <li><strong>Main production repo</strong> — Small features, UI improvements, and fit-and-finish work that can merge directly into production. <a href="#vscode-links">Browse repositories</a>.</li>
+              <li><strong>Figma</strong> — Quick, small-scope features, early concepts, and fit-and-finish notes. <a href="#vscode-links">VS Code</a> · <a href="#github-copilot-links">GitHub Copilot app</a>.</li>
+              <li><strong>Main production repo</strong> — Small features, UI improvements, and fit-and-finish work that can merge directly into production. <a href="#vscode-links">VS Code</a> · <a href="#github-copilot-links">GitHub Copilot app</a>.</li>
               <li><strong>Coded prototypes</strong> — Larger end-to-end flow explorations with more complex interactions and many variants. <a href="#vscode-links">VS Code examples</a> · <a href="#github-copilot-links">GitHub Copilot app examples</a>.</li>
             </ul>
           </div>
@@ -1959,10 +2162,19 @@
           <div class="section-head stacked">
             <div><span class="section-pill">05 · Strategy</span><h2>Key references.</h2></div>
           </div>
-          <div class="resource-grid">
-            <article class="resource"><span class="resource-type">Team context</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/foundry-developer-experience/" target="_blank" rel="noreferrer">Foundry Developer Experience overview</a><p>Product area, connected experiences, and demos.</p></article>
-            <article class="resource"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BD23A6169-1F35-41BA-9DBD-1A4FD6A9E892%7D&amp;file=Foundry%20Developer%20Experience%20Strategy%20%28July%20-%20Dec%202026%29.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Foundry DevEx strategy, July–December 2026</a><p>WIP PM strategy for the rest of the year.</p></article>
-            <article class="resource"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/paulocoelho_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B12C45759-EA72-452A-89F6-065AFA10D7DF%7D&amp;file=Apogee%20Loop%20-%20Team%20Strategy.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Apogee Loop — Team Strategy</a><p>Mission, ownership model, and core design philosophy.</p></article>
+          <div class="resource-grid strategy-resource-grid">
+            <article class="resource resource-visual">
+              <a class="resource-preview" href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/foundry-developer-experience/" target="_blank" rel="noreferrer" aria-label="Open the Foundry Developer Experience overview"><img src="foundry-devex-transition-assets/foundry-devex-overview-preview.png" alt="Preview of the Foundry Developer Experience overview"></a>
+              <div class="resource-copy"><span class="resource-type">Team context</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/foundry-developer-experience/" target="_blank" rel="noreferrer">Foundry Developer Experience overview</a><p>Product area, connected experiences, and demos.</p></div>
+            </article>
+            <article class="resource resource-visual">
+              <a class="resource-preview strategy-doc-preview" href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BD23A6169-1F35-41BA-9DBD-1A4FD6A9E892%7D&amp;file=Foundry%20Developer%20Experience%20Strategy%20%28July%20-%20Dec%202026%29.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer" aria-label="Open the Foundry DevEx strategy document"><span class="strategy-doc-sheet" aria-hidden="true"><span class="strategy-doc-icon">W</span><span class="strategy-doc-line"></span><span class="strategy-doc-line"></span><span class="strategy-doc-line short"></span><span class="strategy-doc-label">Internal strategy</span></span></a>
+              <div class="resource-copy"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/ronglu_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BD23A6169-1F35-41BA-9DBD-1A4FD6A9E892%7D&amp;file=Foundry%20Developer%20Experience%20Strategy%20%28July%20-%20Dec%202026%29.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Foundry DevEx strategy, July–December 2026</a><p>WIP PM strategy for the rest of the year.</p></div>
+            </article>
+            <article class="resource resource-visual">
+              <a class="resource-preview strategy-doc-preview" href="https://microsoft-my.sharepoint.com/personal/paulocoelho_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B12C45759-EA72-452A-89F6-065AFA10D7DF%7D&amp;file=Apogee%20Loop%20-%20Team%20Strategy.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer" aria-label="Open the Apogee Loop team strategy document"><span class="strategy-doc-sheet" aria-hidden="true"><span class="strategy-doc-icon">W</span><span class="strategy-doc-line"></span><span class="strategy-doc-line"></span><span class="strategy-doc-line short"></span><span class="strategy-doc-label">Team strategy</span></span></a>
+              <div class="resource-copy"><span class="resource-type">Internal strategy</span><a href="https://microsoft-my.sharepoint.com/personal/paulocoelho_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B12C45759-EA72-452A-89F6-065AFA10D7DF%7D&amp;file=Apogee%20Loop%20-%20Team%20Strategy.docx&amp;action=default&amp;mobileredirect=true&amp;DefaultItemOpen=1" target="_blank" rel="noreferrer">Apogee Loop — Team Strategy</a><p>Mission, ownership model, and core design philosophy.</p></div>
+            </article>
           </div>
         </section>
 
@@ -1972,7 +2184,7 @@
             <article class="resource"><span class="resource-type">Internal planning</span><a href="https://loop.cloud.microsoft/p/eyJ1IjoiaHR0cHM6Ly9taWNyb3NvZnQuc2hhcmVwb2ludC1kZi5jb20vY29udGVudHN0b3JhZ2UvQ1NQX2RlZmI4NDVkLWYyOWMtNDRjZC05OTlmLTVjYzdhMzc1ZjVhMT9uYXY9Y3owbE1rWmpiMjUwWlc1MGMzUnZjbUZuWlNVeVJrTlRVQ1UxUm1SbFptSTRORFZrSlRKRVpqSTVZeVV5UkRRMFkyUWxNa1E1T1RsbUpUSkVOV05qTjJFek56Vm1OV0V4Sm1ROVlpVXlNVbFpWVkRjemNIcDVlbFZUV200eGVraHZNMWd4YjFKck1ISlVZVFowWm5CR2RHeFdiRWg2Y3lVeVJGRkVRVXg2T0RWbk9UUnZiRk5aYlRoTlRVZzJVSEExYmlabVBUQXhTa3RUVmtkS1JFbEpVa3cwTkU5Sk5VTkNRa3BNTWpkRU1sRTJRVlpHTmtnbVl6MGxNa1kifQ%3D%3D" target="_blank" rel="noreferrer">September 2026 planning Loop</a><p>Execution plan, ownership, status, and deadlines.</p></article>
           </div>
           <div class="process-strip planning-process" aria-label="Monthly planning process">
-            <div class="process-step"><span>Backlog intake</span><strong>PM adds requests and ideas</strong><small>Different requests and ideas are added to the backlog.</small></div>
+            <div class="process-step"><span>Backlog intake</span><strong>People add requests and ideas</strong><small>Added to the backlog throughout the previous month.</small></div>
             <span class="process-arrow">→</span>
             <div class="process-step"><span>Prioritization</span><strong>PM + engineering leads review the board</strong><small>Prioritize the backlog together.</small></div>
             <span class="process-arrow">→</span>
@@ -1980,7 +2192,7 @@
             <span class="process-arrow">→</span>
             <div class="process-step"><span>Capacity + distribution</span><strong>Amy leads planning with Jaeyong</strong><small>Plan capacity, then decide together how work is distributed.</small></div>
           </div>
-          <p class="planning-note"><strong>Side note:</strong> Paulo is working on involving design earlier.</p>
+          <p class="planning-note">*Paulo is working on involving design earlier.</p>
         </section>
 
         <section class="section" id="vscode-extension">
@@ -2011,7 +2223,7 @@
                 <div class="track-event">
                   <span class="evolution-date">May 2024</span>
                   <strong>AI Toolkit GA</strong>
-                  <p>The original VS Code toolkit reached general availability.</p>
+                  <p>The original language-agnostic VS Code toolkit reached general availability without Microsoft branding.</p>
                 </div>
               </div>
             </article>
@@ -2042,35 +2254,40 @@
 
         <section class="section" id="vscode-surface">
           <div class="section-head stacked">
-            <div><span class="section-pill">09 · VS Code workspace</span><h2>Foundry beside the code.</h2></div>
-            <p class="section-deck">The extension brings project context, agent building, Copilot, and feedback into one workspace.</p>
+            <div><span class="section-pill">09 · What Makes This Surface Unique</span><h2>Copilot-Driven. Code-First. Built for Pro Devs.</h2></div>
           </div>
-          <div class="wireframe" aria-label="Annotated VS Code workspace showing project context, Foundry Toolkit, and Copilot with inline feedback">
+          <div class="wireframe" aria-label="Annotated VS Code workspace showing Copilot access, project context in Explorer, and proactive assistance">
             <div class="wireframe-toolbar"><strong>VS Code workspace</strong><span>Code-first</span></div>
             <div class="wireframe-grid">
               <div class="wireframe-pane">
-                <span class="wireframe-label">1 · Project context</span>
-                <ul class="file-list">
-                  <li>Source code</li>
-                  <li>Dependencies</li>
-                  <li>Configuration</li>
-                </ul>
+                <span class="wireframe-label">1 · Access to Copilot</span>
+                <div class="copilot-panel-mock" aria-label="Abstract Copilot side-window wireframe">
+                  <div class="copilot-panel-head"><strong>Chat</strong><span>+ &nbsp; ⚙ &nbsp; ···</span></div>
+                  <div class="copilot-session-title"><span>←</span><span class="copilot-scribble"></span></div>
+                  <div class="copilot-thread">
+                    <div class="copilot-bubble user"><span class="copilot-scribble"></span><span class="copilot-scribble short"></span></div>
+                    <div class="copilot-bubble"><span class="copilot-scribble"></span><span class="copilot-scribble"></span><span class="copilot-scribble short"></span></div>
+                  </div>
+                  <div class="copilot-composer"><span class="copilot-scribble short"></span><small>+ &nbsp; ◇ Agent</small></div>
+                </div>
               </div>
               <div class="wireframe-pane">
-                <span class="wireframe-label">2 · Foundry Toolkit</span>
-                <ul class="signal-list">
-                  <li>Agent</li>
-                  <li>Model</li>
-                  <li>Tools</li>
-                </ul>
+                <span class="wireframe-label">2 · Project context</span>
+                <div class="explorer-mock" aria-label="Mock VS Code Explorer">
+                  <div class="explorer-title">EXPLORER</div>
+                  <div class="explorer-row"><span>▾</span><strong>FOUNDRY-PROJECT</strong></div>
+                  <div class="explorer-row indent-1"><span>▾</span><span>src</span></div>
+                  <div class="explorer-row indent-2"><span>◇</span><span>agent.py</span></div>
+                  <div class="explorer-row indent-2"><span>◇</span><span>tools.py</span></div>
+                  <div class="explorer-row indent-1"><span>◇</span><span>azure.yaml</span></div>
+                </div>
               </div>
               <div class="wireframe-pane">
-                <span class="wireframe-label">3 · Copilot + feedback</span>
-                <div class="mock-message">Use the project context</div>
-                <div class="mock-message accent">Debug and fix inline</div>
-                <ul class="signal-list">
-                  <li>Terminal and validation output stay nearby</li>
-                </ul>
+                <span class="wireframe-label">3 · Proactive assistance</span>
+                <div class="copilot-action-mock" aria-label="Example contextual Copilot actions">
+                  <div class="copilot-action">✦ Resolve with Copilot</div>
+                  <div class="copilot-action secondary">✦ Explain with Copilot</div>
+                </div>
               </div>
             </div>
           </div>
@@ -2112,9 +2329,9 @@
           </div>
           <div class="timeline" aria-label="Origin and current state of the VS Code extension UI system">
             <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">2024</span><div class="timeline-body"><h3>The official toolkit was deprecated</h3><p>VS Code extensions no longer had an official UI component system.</p></div></div>
-            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">The problem</span><div class="timeline-body"><h3>Two teams were solving the same problem separately</h3><p>Because Fluent did not look like VS Code, each extension team built its own CSS overrides. Once packaged together, those separate approaches made the combined extension feel even less consistent.</p></div></div>
-            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Amy stepped up</span><div class="timeline-body"><h3>Designing and coding a shared layer</h3><p>Amy decided to design and code a component layer that makes Fluent feel native to VS Code, collaborating with Hui as the engineering reviewer.</p></div></div>
-            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Today</span><div class="timeline-body"><h3>Basic components are published</h3><p>New extension features already use these components, and we have started replacing them in some older features.</p><small class="timeline-note">The remaining legacy cleanup and system iteration will continue as resources allow.</small></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">The problem<small>2025</small></span><div class="timeline-body"><h3>Two teams were solving the same problem separately</h3><p>Because Fluent did not look like VS Code, each extension team built its own CSS overrides. Once packaged together, those separate approaches made the combined extension feel even less consistent.</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Amy stepped up<small>Feb 2026</small></span><div class="timeline-body"><h3>Designing and coding a shared layer</h3><p>Amy decided to design and code a component layer that makes Fluent feel native to VS Code, collaborating with Hui as the engineering reviewer.</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">Summer 2026</span><div class="timeline-body"><h3>Basic components are published</h3><p>New extension features already use these components, and we have started replacing them in some older features.</p><small class="timeline-note">The remaining legacy cleanup and system iteration will continue as resources allow.</small></div></div>
           </div>
           <div class="resource-groups">
             <section class="resource-group">
@@ -2153,8 +2370,14 @@
             <section class="resource-group">
               <div class="resource-group-head"><h3>Prototypes</h3></div>
               <div class="resource-grid">
-                <article class="resource"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/agent-catalog/?preview=create-agent" target="_blank" rel="noreferrer">Create Agent / agent catalog</a><p>Agent catalog and Create Agent flow.</p></article>
-                <article class="resource"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-agent-inspector-prototype/?view=runs" target="_blank" rel="noreferrer">Agent Inspector</a><p>Turns, runs, and inspection workflow.</p></article>
+                <article class="resource resource-visual">
+                  <a class="resource-preview" href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/agent-catalog/?preview=create-agent" target="_blank" rel="noreferrer" aria-label="Open the Create Agent and agent catalog prototype"><img src="foundry-devex-transition-assets/vscode-create-agent-preview.png" alt="Preview of the Create Agent prototype"></a>
+                  <div class="resource-copy"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-prototypes/prototypes/agent-catalog/?preview=create-agent" target="_blank" rel="noreferrer">Create Agent / agent catalog</a><p>Agent catalog and Create Agent flow.</p></div>
+                </article>
+                <article class="resource resource-visual">
+                  <a class="resource-preview" href="https://si-jin-chen.github.io/foundry-agent-inspector-prototype/?view=runs" target="_blank" rel="noreferrer" aria-label="Open the Agent Inspector prototype"><img src="foundry-devex-transition-assets/vscode-agent-inspector-preview.png" alt="Preview of the Agent Inspector prototype"></a>
+                  <div class="resource-copy"><span class="resource-type">Prototype</span><a href="https://si-jin-chen.github.io/foundry-agent-inspector-prototype/?view=runs" target="_blank" rel="noreferrer">Agent Inspector</a><p>Turns, runs, and inspection workflow.</p></div>
+                </article>
               </div>
             </section>
           </div>
@@ -2178,7 +2401,7 @@
 
         <section class="section" id="github-copilot-canvas">
           <div class="section-head stacked">
-            <div><span class="section-pill">14 · Agent canvas</span><h2>Two types of canvas pages.</h2></div>
+            <div><span class="section-pill">14 · Agent canvas</span><h2>Two canvas page examples so far.</h2></div>
             <p class="section-deck">Canvas uses Fluent as its design system.</p>
           </div>
           <div class="canvas-experiences">
@@ -2408,9 +2631,13 @@
     document.getElementById("lightboxPrevious").addEventListener("click", () => updateConsiderationSlide(considerationSlideIndex - 1));
     document.getElementById("lightboxNext").addEventListener("click", () => updateConsiderationSlide(considerationSlideIndex + 1));
     document.getElementById("lightboxClose").addEventListener("click", () => slideLightbox.close());
-    slideLightbox.addEventListener("click", event => {
-      if (event.target === slideLightbox) slideLightbox.close();
-    });
+    const closeLightboxFromEmptySpace = event => {
+      const clickedEmptySpace = event.target === event.currentTarget
+        || event.target.classList?.contains("lightbox-layout")
+        || event.target.classList?.contains("lightbox-image-wrap");
+      if (clickedEmptySpace) event.currentTarget.close();
+    };
+    slideLightbox.addEventListener("click", closeLightboxFromEmptySpace);
     slideLightbox.addEventListener("keydown", event => {
       if (event.key === "ArrowLeft") {
         event.preventDefault();
@@ -2446,9 +2673,7 @@
     document.getElementById("orgChartPrevious").addEventListener("click", () => updateOrgChart(orgChartIndex - 1));
     document.getElementById("orgChartNext").addEventListener("click", () => updateOrgChart(orgChartIndex + 1));
     document.getElementById("orgChartClose").addEventListener("click", () => orgChartLightbox.close());
-    orgChartLightbox.addEventListener("click", event => {
-      if (event.target === orgChartLightbox) orgChartLightbox.close();
-    });
+    orgChartLightbox.addEventListener("click", closeLightboxFromEmptySpace);
     orgChartLightbox.addEventListener("keydown", event => {
       if (event.key === "ArrowLeft") {
         event.preventDefault();
